@@ -6,9 +6,11 @@
     "bootstrap": "^3.3.7",
     "highcharts": "^6.0.3",
     "react": "^16.2.0",
-    "react-dom": "^16.1.1",
+    "react-bootstrap": "^0.31.5",
+    "react-dom": "^16.2.0",
     "react-highcharts": "^15.0.0",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "reactstrap": "^5.0.0-alpha.4"
   },
   "scripts": {
     "start": "react-scripts start",

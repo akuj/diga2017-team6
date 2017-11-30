@@ -19,7 +19,7 @@ class App extends Component {
       /* this.state.items */
 
     <div className="container">
-      <Graphs items={1}/>
+      <Graphs/>
     </div>
     );
   }

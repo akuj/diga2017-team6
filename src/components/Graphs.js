@@ -1,124 +1,118 @@
 import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Bootstrap, ToggleButton, MenuItem, ToggleButtonGroup, ButtonToolbar} from 'react-bootstrap';
+import { Button, ButtonGroup } from 'reactstrap';
 const ReactHighcharts = require('react-highcharts');
 
 class Graphs extends Component {
+
+    constructor (props) {
+        super(props);
+    
+        this.state = { rSelected: 'column' };
+    
+        this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+      }
+
+    onRadioBtnClick(rSelected) {
+        this.setState({ rSelected });
+      }
+
   render () {
 
-      /*
-      {
-          name: 'IE',
-          y: 56.33
-      }
-      */
-      /*let processedTodoTypes = [];
-      this.props.items.forEach(element => {
-          let todoIndex = processedTodoTypes.findIndex(todoType => todoType.name === element.type);
-          if(todoIndex == -1)
-          {
-              processedTodoTypes.push({
-                  name: element.type,
-                  y: 1
-              });
-          }
-          else
-          {
-              processedTodoTypes[todoIndex].y++;
-          }
-      });
 
-      const config = {
-          chart: {
-              plotBackgroundColor: null,
-              plotBorderWidth: null,
-              plotShadow: false,
-              type: 'pie'
-          },
-          title: {
-              text: 'Browser market shares January, 2015 to May, 2015'
-          },
-          tooltip: {
-              pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-          },
-          plotOptions: {
-              pie: {
-                  allowPointSelect: true,
-                  cursor: 'pointer',
-                  dataLabels: {
-                      enabled: true,
-                      format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                      style: {
-                          color: 'black'
-                      }
-                  }
-              }
-          },
-          series: [{
-              name: 'Brands',
-              colorByPoint: true,
-              data: processedTodoTypes
-          }]
-      };
-      return (
-          <div>
-              <ReactHighcharts config = {config}></ReactHighcharts>
-          </div>
-      )*/
+      var config = {
+        
+            chart: {
+                    type: this.state.rSelected
+            },
+            title: {
+                text: 'Monthly Average Rainfall'
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+            xAxis: {
+                categories: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec'
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Rainfall (mm)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                },
 
-      const config = {
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
-            type: 'pie'
-        },
-        title: {
-            text: 'Browser market shares January, 2015 to May, 2015'
-        },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                    style: {
-                        color: 'black'
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: 'black'
+                        }
                     }
                 }
-            }
-        },
-        series: [{
-            name: 'Brands',
-            colorByPoint: true,
-            data: [{
-                name: 'IE',
-                y: 56.33
+            },
+            series: [{
+                name: 'Tokyo',
+                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        
             }, {
-                name: 'Chrome',
-                y: 24.03,
-                sliced: true,
-                selected: true
+                name: 'New York',
+                data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+        
             }, {
-                name: 'Firefox',
-                y: 10.38
+                name: 'London',
+                data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+        
             }, {
-                name: 'Safari',
-                y: 4.77
-            }, {
-                name: 'Opera',
-                y: 0.91
-            }, {
-                name: 'Other',
-                y: 0.2
+                name: 'Berlin',
+                data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+        
             }]
-        }]
     };
+
     return (
       <div>
+        <h1>
           <ReactHighcharts config = {config}></ReactHighcharts>
+        </h1>
+
+        <ButtonGroup>
+          <Button color="default" onClick={() => this.onRadioBtnClick('column')} active={this.state.rSelected.includes ('column')}>column</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>pie</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>Three</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>4</Button>
+        </ButtonGroup>
+        <p>Selected: {this.state.rSelected}</p>
       </div>)
   }
 }
