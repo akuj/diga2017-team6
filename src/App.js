@@ -28,8 +28,12 @@ class App extends Component {
     return (
       <div className="App">
         <h1>{this.state.titleText}</h1>
-        <DropdownMenuScenarios listNameFromParent={this.callback}/>
+        <p>{this.state.regionallevel}</p>
         <p>{this.state.region}</p>
+        <p>{this.state.scenariocollection}</p>
+        <p>{this.state.scenario}</p>
+        <p>{this.state.period}</p>
+        <DropdownMenuScenarios listNameFromParent={this.callback}/>
       </div>
     );
   }
