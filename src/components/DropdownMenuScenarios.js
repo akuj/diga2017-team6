@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {DropdownButton, MenuItem, ButtonGroup, Button} from 'react-bootstrap';
-//import {Button, ButtonGroup} from 'reactstrap'
 
 const regionalLevels = ['Regional level 1', 'Regional level 2', 'Regional level 3'];
 const regions = ['Region 1', 'Region 2', 'Region 3'];
@@ -30,7 +29,7 @@ class DropdownMenuScenarios extends React.Component {
         const index = this.state.checkboxesSelected.indexOf(selected);
         if (index < 0) {
           this.state.checkboxesSelected.push(selected);
-        } else {
+        } else if(this.state.checkboxesSelected.length>1){
           this.state.checkboxesSelected.splice(index, 1);
         }
         this.setState({ checkboxesSelected: [...this.state.checkboxesSelected] });
@@ -55,6 +54,7 @@ class DropdownMenuScenarios extends React.Component {
         return (
             <div style={{textAlign:"left"}}>
                 <h1>Scenarios</h1>
+
                 <p>Regional level</p>
                 <DropdownButton title={this.state.regionallevel} onSelect={(evt)=>{
                     this.setState({regionallevel: evt}, () => {
@@ -64,6 +64,7 @@ class DropdownMenuScenarios extends React.Component {
                         <MenuItem eventKey={regionalleveli} key={i}>{regionalleveli}</MenuItem>)}
                 </DropdownButton>  
                 <p>  </p> 
+
                 <p>Region</p>
                 <DropdownButton title={this.state.region} onSelect={(evt)=>{
                     this.setState({region: evt}, () => {
@@ -73,6 +74,7 @@ class DropdownMenuScenarios extends React.Component {
                         <MenuItem eventKey={regioni} key={i}>{regioni}</MenuItem>)}
                 </DropdownButton>    
                 <p>  </p> 
+
                 <p>Scenario collection</p>
                 <DropdownButton title={this.state.scenariocollection} onSelect={(evt)=>{
                         this.setState({scenariocollection: evt}, () => {
