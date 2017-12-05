@@ -18,7 +18,7 @@ class DropdownMenuScenarios extends React.Component {
     
         this.state = {
             regionallevel: this.props.regionalLevelOptionsFromParent[0],
-            region: this.props.regionOptionsFromParent[0].name,
+            region: this.props.regionOptionsFromParent[0],
             scenariocollection: scenarioCollections[0],
             checkboxesSelected: [scenarios[0]],
             radioButtonSelected: periods[0]
@@ -43,9 +43,10 @@ class DropdownMenuScenarios extends React.Component {
     }
 
     sendNewScenarios(){
-        this.props.sendChoicesToApp(this.state.regionallevel.name, 
+        console.log("regionallevel from dropdown: ", this.state.regionallevel);
+        this.props.sendChoicesToApp(this.state.regionallevel, 
             this.state.region, 
-            this.state.scenariocollection, 
+            this.state.scenario, 
             this.state.checkboxesSelected, 
             this.state.radioButtonSelected);
     }
@@ -59,19 +60,30 @@ class DropdownMenuScenarios extends React.Component {
                 <h1>Scenarios</h1>
                 <p>Regional level</p>
                 <DropdownButton title={this.state.regionallevel.name} onSelect={(evt)=>{
-                    this.setState({regionallevel: evt}, () => {
+                    //console.log("Regional level options from menu: ", regionalLevelOptions);
+                    this.setState(prevState => ({
+                        regionallevel: {
+                            ...prevState.regionallevel,
+                            name: evt.name
+                        }
+                    }));
                         this.sendNewScenarios();
-                    })}}>
+                    }}>
                     {regionalLevelOptions.map((regionalleveli, i) =>                       
-                            <MenuItem eventKey={regionalleveli.name} key={i}>{regionalleveli.name}</MenuItem>)}                       
+                            <MenuItem eventKey={regionalleveli} key={i}>{regionalleveli.name}</MenuItem>)}                       
                 </DropdownButton>  
                 <p>  </p> 
 
                 <p>Region</p>
-                <DropdownButton title={this.state.region} onSelect={(evt)=>{
-                    this.setState({region: evt}, () => {
+                <DropdownButton title={this.state.region.name} onSelect={(evt)=>{
+                    this.setState(prevState => ({
+                        region: {
+                            ...prevState.region,
+                            name: evt
+                        }
+                    }));
                         this.sendNewScenarios();
-                    })}}>
+                    }}>
                     {regionOptions.map((regioni, i) =>
                         <MenuItem eventKey={regioni.name} key={i}>{regioni.name}</MenuItem>)}
                 </DropdownButton>    

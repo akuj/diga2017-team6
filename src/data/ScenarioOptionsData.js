@@ -7,7 +7,7 @@ function getRegionLevels(){
     
             axios.get("http://melatupa.azurewebsites.net/regionLevels", {headers: {'Accept-Language': 'en'}})
             .then(results => {
-                console.log(results);
+                console.log("Dataa tulee: ", results);
                 const regionLevels = results.data.map(element => {
                     element.name = element.name;
                     element.description = element.description;
@@ -32,7 +32,7 @@ function getRegions(regionLevelId){
     
             axios.get(url, {headers: {'Accept-Language': 'en'}})
             .then(regionresults => {
-                console.log(regionresults);
+                //console.log("Dataa tulee: ",regionresults);
                 const regions = regionresults.data.map(element => {
                     element.name = element.name;
                     element.shortname = element.shortname;

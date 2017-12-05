@@ -27,25 +27,39 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.updateIndicatorOptions();
-  }
+    ScenarioOptionsData.getRegionLevels().then(result => {
+      this.setState({ regionalLevelOptions: result });
+      console.log("Region level options from app: ", this.state.regionalLevelOptions);
+      console.log("Selected region level id from app: ", this.state.selectedRegionallevel.id);
+      //this.updateIndicatorOptions();
+    })
+
+    ScenarioOptionsData.getRegions(1).then(regionresult => {
+        this.setState({ regionOptions: regionresult });
+        //console.log("Region 1 from app:", this.state.regionOptions[0]);
+        this.setState({ScenarioMenureadytogo: true});
+      })
+  };
 
   updateIndicatorOptions = () => {
     ScenarioOptionsData.getRegionLevels().then(result => {
       this.setState({ regionalLevelOptions: result });
-      console.log("Region level 1: ", this.state.regionalLevelOptions[0].name);
-      console.log("Region level id: ", this.state.regionalLevelOptions[0].id);
+      console.log("Region level 1 options from app: ", this.state.regionalLevelOptions[0]);
+      console.log("Selected region level id from app: ", this.state.selectedRegionallevel.id);
+      //this.updateIndicatorOptions();
+    })
 
-      ScenarioOptionsData.getRegions(this.state.regionalLevelOptions[0].id).then(regionresult => {
+    ScenarioOptionsData.getRegions(this.state.selectedRegionallevel.id).then(regionresult => {
         this.setState({ regionOptions: regionresult });
-        console.log("Region 1:", this.state.regionOptions[0]);
+        //console.log("Region 1 from app:", this.state.regionOptions[0]);
         this.setState({ScenarioMenureadytogo: true});
-      });
-    });
-  }
+      })
+    };
 
   callback = (regionalleveli, regioni, scenariocollectioni, scenarioi, periodi) => {
     this.setState({selectedRegionallevel : regionalleveli});
+    console.log("regionalleveli callbackissä: ", regionalleveli);
+    console.log("Selected regional level callbackissä: ", this.state.selectedRegionallevel);
     this.setState({selectedRegion: regioni});
     this.setState({selectedScenariocollection: scenariocollectioni});
     this.setState({selectedScenario: scenarioi});
