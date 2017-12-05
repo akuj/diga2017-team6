@@ -9,13 +9,21 @@ class Graphs extends Component {
     constructor (props) {
         super(props);
     
-        this.state = { rSelected: 'column' };
+        this.state = { rSelected: 'column', polar1: false};
     
         this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
       }
 
     onRadioBtnClick(rSelected) {
-        this.setState({ rSelected });
+        if (this.state.rSelected === 'polar')
+        {
+            this.setState({ polar1: true });
+        }
+        else(this.state.rSelected != 'polar')
+        {
+            this.setState({ polar1: false });
+            this.setState({ rSelected });
+        }
       }
 
   render () {
@@ -24,7 +32,10 @@ class Graphs extends Component {
       var config = {
         
             chart: {
-                    type: this.state.rSelected
+                //{this.state.polar1 ? '' : type: this.state.rSelected}
+                    type: this.state.rSelected,
+                    
+                    polar: this.state.polar1,
             },
             title: {
                 text: 'Monthly Average Rainfall'
@@ -108,9 +119,8 @@ class Graphs extends Component {
 
         <ButtonGroup>
           <Button color="default" onClick={() => this.onRadioBtnClick('column')} active={this.state.rSelected.includes ('column')}>column</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('polar')} active={this.state.rSelected.includes ('polar')}>polar</Button>
           <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>pie</Button>
-          <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>Three</Button>
-          <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>4</Button>
         </ButtonGroup>
         <p>Selected: {this.state.rSelected}</p>
       </div>)
