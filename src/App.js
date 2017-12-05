@@ -10,39 +10,55 @@ class App extends Component {
     this.state = {
         titleText: "Forest Indicator Service",
         
-        selectedRegionallevel: "",
-        selectedRegion: "",
-        selectedScenariocollection: "",
-        selectedScenario: "",
-        selectedPeriod: "",
+        regionalLevelOptions: [],
+        regionOptions: [],
+        scenarioCollectionOptions: [],
+        scenarioOptions: [],
+        periodOptions: [],
+
+        selectedRegionallevel: {},
+        selectedRegion: {},
+        selectedScenariocollection: {},
+        selectedScenario: {},
+        selectedPeriod: {},
 
         ScenarioMenureadytogo: false
       };    
   }
 
   componentDidMount(){
+    this.updateIndicatorOptions();
+  }
+
+  updateIndicatorOptions = () => {
     ScenarioOptionsData.getRegionLevels().then(result => {
-      this.setState({ regionLevels: result });
-      console.log("Leidies and gentlemen");
-      console.log(this.state.regionLevels[0].name);
-      console.log("wasnt that nice");
-      this.setState({ScenarioMenureadytogo: true});
+      this.setState({ regionalLevelOptions: result });
+      console.log("Region level 1: ", this.state.regionalLevelOptions[0].name);
+      console.log("Region level id: ", this.state.regionalLevelOptions[0].id);
+
+      ScenarioOptionsData.getRegions(this.state.regionalLevelOptions[0].id).then(regionresult => {
+        this.setState({ regionOptions: regionresult });
+        console.log("Region 1:", this.state.regionOptions[0]);
+        this.setState({ScenarioMenureadytogo: true});
+      });
     });
   }
 
   callback = (regionalleveli, regioni, scenariocollectioni, scenarioi, periodi) => {
-    this.setState({selectedRegionallevel: regionalleveli});
+    this.setState({selectedRegionallevel : regionalleveli});
     this.setState({selectedRegion: regioni});
     this.setState({selectedScenariocollection: scenariocollectioni});
     this.setState({selectedScenario: scenarioi});
     this.setState({selectedPeriod: periodi});
+    this.updateIndicatorOptions();
   }
 
   render() {
     return (
       <div className="App">
         <h1>{this.state.titleText}</h1>
-        {this.state.ScenarioMenureadytogo ? <DropdownMenuScenarios regionalLevelOptionsFromParent={this.state.regionLevels}
+        {this.state.ScenarioMenureadytogo ? <DropdownMenuScenarios regionalLevelOptionsFromParent={this.state.regionalLevelOptions}
+                                                                    regionOptionsFromParent={this.state.regionOptions}
                                                                     sendChoicesToApp={this.callback}/>
         : <p>loading</p>}
       </div>

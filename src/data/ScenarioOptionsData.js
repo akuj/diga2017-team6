@@ -5,7 +5,7 @@ function getRegionLevels(){
         // get the data from somewhere?
         return new Promise((resolve, reject) => {
     
-            axios.get("http://melatupa.azurewebsites.net/regionLevels?en")
+            axios.get("http://melatupa.azurewebsites.net/regionLevels", {headers: {'Accept-Language': 'en'}})
             .then(results => {
                 console.log(results);
                 const regionLevels = results.data.map(element => {
@@ -23,4 +23,30 @@ function getRegionLevels(){
         });
     }
 
-    export default { getRegionLevels };
+function getRegions(regionLevelId){
+
+        var url = "http://melatupa.azurewebsites.net/regionLevels/"+regionLevelId+"/"+"regions";
+    
+        // get the data from somewhere?
+        return new Promise((resolve, reject) => {
+    
+            axios.get(url, {headers: {'Accept-Language': 'en'}})
+            .then(regionresults => {
+                console.log(regionresults);
+                const regions = regionresults.data.map(element => {
+                    element.name = element.name;
+                    element.shortname = element.shortname;
+                    element.id = element.id;
+                    element.order = element.order;
+                    return element;
+                });
+                resolve(regions);
+            })
+            .catch(error => {
+                console.log(error);
+                reject();
+            })
+        });
+    }
+
+    export default { getRegionLevels, getRegions };
