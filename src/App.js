@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import ReactDOM from 'react-dom';
 import Graphs from './components/Graphs';
-import DropdownMenuScenarios from './components/DropdownMenuScenarios'
+import DropdownMenuScenarios from './components/DropdownMenuScenarios';
+import ChoosingIndicators from './components/ChoosingIndicators';
 
 class App extends Component {
   constructor(props) {
@@ -27,13 +29,20 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App">            
         <h1>{this.state.titleText}</h1>
-        <DropdownMenuScenarios listNameFromParent={this.callback}/>
-        <Graphs/>
+          <div className="container">
+            <div className="row">          
+                <div className="col-md-3"><DropdownMenuScenarios listNameFromParent={this.callback}/></div>
+                <div className="col-md-6"><Graphs/></div>
+                <div className="col-md-3"><ChoosingIndicators/></div>
+            </div>
+          </div>
       </div>
     );
   }
 }
+
+ReactDOM.render(<ChoosingIndicators/>, document.getElementById('root'));
 
 export default App;

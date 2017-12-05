@@ -49,7 +49,7 @@ class ChoosingIndicators extends React.Component {
         return (
             <div className="container">
                 <div className="row">
-                    <div className="col-md-12">
+                    <div className="col-md-3">
 
                         <h2>Products</h2>
                         <form onSubmit={this.handleFormSubmit}>
@@ -57,6 +57,7 @@ class ChoosingIndicators extends React.Component {
 
                             <button className="btn btn-default" type="submit">Save</button>
                         </form>
+                        
                     </div>
                 </div>
             </div>
