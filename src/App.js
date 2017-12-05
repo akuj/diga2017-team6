@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Graphs from './components/Graphs';
+import { Row, Grid, Col } from 'react-bootstrap';
 import DropdownMenuScenarios from './components/DropdownMenuScenarios'
 
 class App extends Component {
@@ -27,10 +28,18 @@ class App extends Component {
 
   render() {
     return (
+      
       <div className="App">
         <h1>{this.state.titleText}</h1>
-        <DropdownMenuScenarios listNameFromParent={this.callback}/>
-        <Graphs/>
+        
+        <Grid>
+
+    <Row className="show-grid">
+      <Col xs={4} md={2}><DropdownMenuScenarios listNameFromParent={this.callback}/></Col>
+      <Col xs={4} md={8}><Graphs/></Col>
+      <Col xs={4} md={2}><Graphs/></Col>
+    </Row>
+  </Grid>
       </div>
     );
   }
