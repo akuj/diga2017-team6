@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Graphs from './components/Graphs';
 import DropdownMenuScenarios from './components/DropdownMenuScenarios'
 
 class App extends Component {
@@ -29,6 +30,7 @@ class App extends Component {
       <div className="App">
         <h1>{this.state.titleText}</h1>
         <DropdownMenuScenarios listNameFromParent={this.callback}/>
+        <Graphs/>
       </div>
     );
   }
