@@ -54,8 +54,7 @@ class ChoosingIndicators extends React.Component {
                         <h2>Products</h2>
                         <form onSubmit={this.handleFormSubmit}>
                             {this.createCheckboxes()}
-
-                            <button className="btn btn-default" type="submit">Save</button>
+                            
                         </form>
                         
                     </div>
