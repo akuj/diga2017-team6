@@ -10,15 +10,13 @@ class App extends Component {
     this.state = {
         titleText: "Forest Indicator Service",
         
-        regionalLevelOptions: [],
-        regionOptions: [],
-        scenarioCollectionOptions: [],
-        scenarioOptions: [],
-        periodOptions: [],
+        regionalLevelsData: [],
+        regionsData: [],
+        scenariosData: [],
 
-        selectedRegionallevel: {},
-        selectedRegion: {},
-        selectedScenariocollection: {},
+        selectedRegionallevel: {id: 1},
+        selectedRegion: {id: 24},
+        selectedScenariocollection: {id: 6},
         selectedScenario: {},
         selectedPeriod: {},
 
@@ -27,52 +25,41 @@ class App extends Component {
   }
 
   componentDidMount(){
-    ScenarioOptionsData.getRegionLevels().then(result => {
-      this.setState({ regionalLevelOptions: result });
-      console.log("Region level options from app: ", this.state.regionalLevelOptions);
-      console.log("Selected region level id from app: ", this.state.selectedRegionallevel.id);
-      //this.updateIndicatorOptions();
+    ScenarioOptionsData.getAllRegionLevelData().then(result => {
+      this.setState({ regionalLevelsData: result }, function(){
+        this.updateScenarioOptions();
+      });
     })
-
-    ScenarioOptionsData.getRegions(1).then(regionresult => {
-        this.setState({ regionOptions: regionresult });
-        //console.log("Region 1 from app:", this.state.regionOptions[0]);
-        this.setState({ScenarioMenureadytogo: true});
-      })
   };
 
-  updateIndicatorOptions = () => {
-    ScenarioOptionsData.getRegionLevels().then(result => {
-      this.setState({ regionalLevelOptions: result });
-      console.log("Region level 1 options from app: ", this.state.regionalLevelOptions[0]);
-      console.log("Selected region level id from app: ", this.state.selectedRegionallevel.id);
-      //this.updateIndicatorOptions();
+  updateScenarioOptions = () => {
+    ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id).then(regionresult => {
+        this.setState({ regionsData: regionresult });
+        ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
+          this.setState({ scenariosData: scenarioResult });
+          this.setState({ScenarioMenureadytogo: true});
+        })
     })
-
-    ScenarioOptionsData.getRegions(this.state.selectedRegionallevel.id).then(regionresult => {
-        this.setState({ regionOptions: regionresult });
-        //console.log("Region 1 from app:", this.state.regionOptions[0]);
-        this.setState({ScenarioMenureadytogo: true});
-      })
-    };
+  };
 
   callback = (regionalleveli, regioni, scenariocollectioni, scenarioi, periodi) => {
     this.setState({selectedRegionallevel : regionalleveli});
-    console.log("regionalleveli callbackissä: ", regionalleveli);
-    console.log("Selected regional level callbackissä: ", this.state.selectedRegionallevel);
     this.setState({selectedRegion: regioni});
     this.setState({selectedScenariocollection: scenariocollectioni});
     this.setState({selectedScenario: scenarioi});
-    this.setState({selectedPeriod: periodi});
-    this.updateIndicatorOptions();
+    this.setState({selectedPeriod: periodi}, function(){
+      this.updateScenarioOptions();
+    });
+    
   }
 
   render() {
     return (
       <div className="App">
         <h1>{this.state.titleText}</h1>
-        {this.state.ScenarioMenureadytogo ? <DropdownMenuScenarios regionalLevelOptionsFromParent={this.state.regionalLevelOptions}
-                                                                    regionOptionsFromParent={this.state.regionOptions}
+        {this.state.ScenarioMenureadytogo ? <DropdownMenuScenarios  regionalLevelsDataFromParent={this.state.regionalLevelsData}
+                                                                    regionsDataFromParent={this.state.regionsData}
+                                                                    scenariosDataFromParent={this.state.scenariosData}
                                                                     sendChoicesToApp={this.callback}/>
         : <p>loading</p>}
       </div>

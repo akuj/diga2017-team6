@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-function getRegionLevels(){
+function getAllRegionLevelData(){
     
         // get the data from somewhere?
         return new Promise((resolve, reject) => {
     
-            axios.get("http://melatupa.azurewebsites.net/regionLevels", {headers: {'Accept-Language': 'en'}})
+            axios.get("http://melatupa.azurewebsites.net/regionLevels", {headers: {'Accept-Language': 'fi'}})
             .then(results => {
-                console.log("Dataa tulee: ", results);
+                console.log("Region levels data: ", results);
                 const regionLevels = results.data.map(element => {
                     element.name = element.name;
                     element.description = element.description;
@@ -23,16 +23,16 @@ function getRegionLevels(){
         });
     }
 
-function getRegions(regionLevelId){
+function getRegionData(regionLevelId){
 
         var url = "http://melatupa.azurewebsites.net/regionLevels/"+regionLevelId+"/"+"regions";
     
         // get the data from somewhere?
         return new Promise((resolve, reject) => {
     
-            axios.get(url, {headers: {'Accept-Language': 'en'}})
+            axios.get(url, {headers: {'Accept-Language': 'fi'}})
             .then(regionresults => {
-                //console.log("Dataa tulee: ",regionresults);
+                console.log("Regions data: ", regionresults);
                 const regions = regionresults.data.map(element => {
                     element.name = element.name;
                     element.shortname = element.shortname;
@@ -49,4 +49,31 @@ function getRegions(regionLevelId){
         });
     }
 
-    export default { getRegionLevels, getRegions };
+    
+    function getScenarioCollectionData(scenarioCollectionId, regionId){
+        
+                var url = "http://melatupa.azurewebsites.net/scenarioCollection/"+regionId+"/region/"+scenarioCollectionId;
+            
+                // get the data from somewhere?
+                return new Promise((resolve, reject) => {
+            
+                    axios.get(url, {headers: {'Accept-Language': 'fi'}})
+                    .then(scenarioresults => {
+                        console.log("Scenarios data: ", scenarioresults);
+                        const scenarios = scenarioresults.data.map(element => {
+                            element.name = element.name;
+                            element.description = element.description;
+                            element.id = element.id;
+                            element.order = element.order;
+                            return element;
+                        });
+                        resolve(scenarios);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        reject();
+                    })
+                });
+            }
+
+    export default { getAllRegionLevelData, getRegionData, getScenarioCollectionData };
