@@ -17,7 +17,7 @@ class App extends Component {
         selectedRegionallevel: {id: 1},
         selectedRegion: {id: 24},
         selectedScenariocollection: {id: 6},
-        selectedScenario: {},
+        selectedScenarios: [10],
         selectedPeriod: {},
 
         ScenarioMenureadytogo: false
@@ -26,18 +26,31 @@ class App extends Component {
 
   componentDidMount(){
     ScenarioOptionsData.getAllRegionLevelData().then(result => {
-      this.setState({ regionalLevelsData: result }, function(){
-        this.updateScenarioOptions();
-      });
+      this.setState({ regionalLevelsData: result });
+      this.setState({ selectedRegionallevel: result[0] }, () => {
+        ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id).then(regionresult => {
+          this.setState({ regionsData: regionresult });
+          this.setState({ selectedRegion: regionresult[0] }, () => {
+            ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
+              this.setState({ scenariosData: scenarioResult });
+              this.setState({ selectedScenariocollection: scenarioResult[0] }, () => {
+                this.setState({ScenarioMenureadytogo: true});
+              })
+            })
+          })
+        })
+      })
     })
-  };
+  }
 
   updateScenarioOptions = () => {
     ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id).then(regionresult => {
         this.setState({ regionsData: regionresult });
         ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
-          this.setState({ scenariosData: scenarioResult });
-          this.setState({ScenarioMenureadytogo: true});
+          this.setState({ scenariosData: scenarioResult }, function(){
+            this.setState({ScenarioMenureadytogo: true});
+          });
+          
         })
     })
   };
@@ -46,8 +59,8 @@ class App extends Component {
     this.setState({selectedRegionallevel : regionalleveli});
     this.setState({selectedRegion: regioni});
     this.setState({selectedScenariocollection: scenariocollectioni});
-    this.setState({selectedScenario: scenarioi});
-    this.setState({selectedPeriod: periodi}, function(){
+    this.setState({selectedScenarios: scenarioi});
+    this.setState({selectedPeriod: periodi}, () => {
       this.updateScenarioOptions();
     });
     
