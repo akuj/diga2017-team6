@@ -4,7 +4,8 @@ import './App.css';
 import ReactDOM from 'react-dom';
 import Graphs from './components/Graphs';
 import DropdownMenuScenarios from './components/DropdownMenuScenarios';
-import ChoosingIndicators from './components/ChoosingIndicators';
+import Indicators from './components/Indicators';
+
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class App extends Component {
     this.setState({region: regioni});
     this.setState({scenariocollection: scenariocollectioni});
     this.setState({scenario: scenarioi});
-    this.setState({period: periodi});
+    this.setState({period: periodi});   
   }
 
   render() {
@@ -35,7 +36,7 @@ class App extends Component {
             <div className="row">          
                 <div className="col-md-3"><DropdownMenuScenarios listNameFromParent={this.callback}/></div>
                 <div className="col-md-6"><Graphs/></div>
-                <div className="col-md-3"><ChoosingIndicators/></div>
+                <div className="col-md-3"><Indicators/></div>
             </div>
           </div>
       </div>
@@ -43,6 +44,6 @@ class App extends Component {
   }
 }
 
-ReactDOM.render(<ChoosingIndicators/>, document.getElementById('root'));
+
 
 export default App;
