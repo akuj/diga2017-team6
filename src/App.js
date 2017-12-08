@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import ReactDOM from 'react-dom';
 import './App.css';
 import DropdownMenuScenarios from './components/DropdownMenuScenarios'
 import ScenarioOptionsData from './data/ScenarioOptionsData'
+import Graphs from './components/Graphs';
+import DropdownMenuScenarios from './components/DropdownMenuScenarios';
+import Indicators from './components/Indicators';
+
+
 
 class App extends Component {
   constructor(props) {
@@ -65,21 +71,32 @@ class App extends Component {
                                     id: periodiID}}, () => {
       this.updateScenarioOptions();
     });
-    
   }
 
   render() {
     return (
-      <div className="App">
-        <h1>{this.state.titleText}</h1>
-        {this.state.ScenarioMenureadytogo ? <DropdownMenuScenarios  regionalLevelsDataFromParent={this.state.regionalLevelsData}
+      <div className="App">            
+        <h1 className="App-title">{this.state.titleText}</h1>
+          <div className="container">
+            <div className="row">          
+                <div className="col-md-3">
+                  <div className="ScenarioMenu">{this.state.ScenarioMenureadytogo ? 
+                                            <DropdownMenuScenarios  regionalLevelsDataFromParent={this.state.regionalLevelsData}
                                                                     regionsDataFromParent={this.state.regionsData}
                                                                     scenariosDataFromParent={this.state.scenariosData}
                                                                     sendChoicesToApp={this.getChoicesFromScenarioMenu}/>
-        : <p>loading</p>}
+                                            : <p>loading</p>}</div>
+                </div>
+                <div className="col-md-6"><Graphs/></div>
+                <div className="col-md-3"><Indicators/></div>
+            </div>
+          </div>
+
       </div>
     );
   }
 }
+
+
 
 export default App;
