@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Graphs from './components/Graphs';
 import { Row, Grid, Col } from 'react-bootstrap';
@@ -36,7 +35,10 @@ class App extends Component {
 
     <Row className="show-grid">
       <Col xs={4} md={2}><DropdownMenuScenarios listNameFromParent={this.callback}/></Col>
-      <Col xs={4} md={8}><Graphs/></Col>
+      <Col xs={4} md={8}><Graphs regionobject = {this.state.region}
+      periodobject = {this.state.period} 
+      scenarioobject = {this.state.scenario}
+      /></Col>
       <Col xs={4} md={2}><Graphs/></Col>
     </Row>
   </Grid>

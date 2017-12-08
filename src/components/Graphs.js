@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Bootstrap, ToggleButton, MenuItem, ToggleButtonGroup, ButtonToolbar} from 'react-bootstrap';
+//import {Bootstrap, ToggleButton, MenuItem, ToggleButtonGroup, ButtonToolbar} from 'react-bootstrap';
 import { Button, ButtonGroup } from 'reactstrap';
 const ReactHighcharts = require('react-highcharts');
 
@@ -19,7 +19,7 @@ class Graphs extends Component {
         {
             this.setState({ polar1: true });
         }
-        else(this.state.rSelected != 'polar')
+        else(this.state.rSelected !== 'polar')
         {
             this.setState({ polar1: false });
             this.setState({ rSelected });
@@ -38,10 +38,10 @@ class Graphs extends Component {
                     polar: this.state.polar1,
             },
             title: {
-                text: 'Monthly Average Rainfall'
+                text: this.props.regionobject + ' ' + this.props.periodobject
             },
             subtitle: {
-                text: 'Source: WorldClimate.com'
+                text: 'Scenario ' + this.props.scenarioobject
             },
             xAxis: {
                 categories: [
