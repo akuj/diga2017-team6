@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import ReactDOM from 'react-dom';
 import './App.css';
-import DropdownMenuScenarios from './components/DropdownMenuScenarios'
 import ScenarioOptionsData from './data/ScenarioOptionsData'
 import Graphs from './components/Graphs';
 import DropdownMenuScenarios from './components/DropdownMenuScenarios';
