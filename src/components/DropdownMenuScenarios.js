@@ -2,12 +2,6 @@ import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {DropdownButton, MenuItem, ButtonGroup, Button} from 'react-bootstrap';
 
-const regionalLevels = ['Regional level 1', 'Regional level 2', 'Regional level 3'];
-const regions = ['Region 1', 'Region 2', 'Region 3'];
-const scenarioCollections = ['Scenario collection 1', 'Scenario collection 2', 'Scenario collection 3'];
-const scenarios = ['Scenario 1', 'Scenario 2'];
-const periods = ['Period 1', 'Period 2', 'Period 3', 'Period 4', 'Period 5'];
-
 class DropdownMenuScenarios extends React.Component {
 
     constructor(props) {
@@ -21,20 +15,27 @@ class DropdownMenuScenarios extends React.Component {
             regionallevelSelected: this.props.regionalLevelsDataFromParent[0],
             regionSelected: this.props.regionsDataFromParent[0],
             scenariocollectionSelected: this.props.regionsDataFromParent[0].scenarioCollections[0],
-            scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0].id],
+            scenariosSelectedIDs: [this.props.scenariosDataFromParent[0].scenarios[0].id],
+            scenariosSelectedNames: [this.props.scenariosDataFromParent[0].scenarios[0].name],
             periodSelected: this.props.scenariosDataFromParent[0].timePeriods[0].id
         };
     }
 
-    onCheckboxBtnClick(selected) {
-        const index = this.state.scenariosSelected.indexOf(selected);
+    onCheckboxBtnClick(selectedID, selectedName) {
+        const index = this.state.scenariosSelectedIDs.indexOf(selectedID);
         if (index < 0) {
-          this.state.scenariosSelected.push(selected);
-        } else if(this.state.scenariosSelected.length>1){
-          this.state.scenariosSelected.splice(index, 1);
+          this.state.scenariosSelectedIDs.push(selectedID);
+          this.state.scenariosSelectedNames.push(selectedName);
+        } else if(this.state.scenariosSelectedIDs.length>1){
+          this.state.scenariosSelectedIDs.splice(index, 1);
+          this.state.scenariosSelectedNames.splice(index, 1);
         }
-        this.setState({ scenariosSelected: [...this.state.scenariosSelected] });
-        this.sendNewScenarios();
+        this.setState({ scenariosSelectedIDs: [...this.state.scenariosSelectedIDs] }, ()=> {
+            this.setState({ scenariosSelectedNames: [...this.state.scenariosSelectedNames] }, ()=> {
+                this.sendNewScenarios();
+            })
+        });
+        
     }
 
     onRadioBtnClick = (radioButtonSelected) => {
@@ -47,11 +48,14 @@ class DropdownMenuScenarios extends React.Component {
         this.props.sendChoicesToApp(this.state.regionallevelSelected, 
             this.state.regionSelected, 
             this.state.scenariocollectionSelected, 
-            this.state.scenariosSelected, 
+            this.state.scenariosSelectedIDs,
+            this.state.scenariosSelectedNames, 
             this.state.periodSelected);
     }
 
     checkEverythingsOk(){
+
+        //Checking if selected region is up to date with the selected region
 
         var regionIDs = [];
 
@@ -64,51 +68,43 @@ class DropdownMenuScenarios extends React.Component {
             this.setState({ regionSelected: this.props.regionsDataFromParent[0] }, function(){
                 this.sendNewScenarios();
             });
-            
         }
 
-        var scenariocollections = [];
-        var scenarioIDs = [];
+        //Checking if selected scenariocollection is up to date with the selected region
 
-        console.log("Mapattava regionsdata: ", this.props.regionsDataFromParent);
+        if(this.state.regionSelected.scenarioCollections.includes(this.state.scenariocollectionSelected)){
 
-        this.props.regionsDataFromParent.map((region, i) =>
-        scenariocollections.push(region.scenarioCollections));
-
-        console.log("Mapatut collectionit: ", scenariocollections);
-
-        for(var i; i < scenariocollections.length; i++){
-            for(var a; a < scenariocollections[i].length; a++){
-                scenarioIDs.push(scenariocollections[i].id)
-            }
-        }
-
-        /*for (var i = 0; i < this.props.regionalLevelsDataFromParent.length; i++) { 
-            console.log("regionname: ", this.props.regionsDataFromParent[i].name)
-            if(this.props.regionsDataFromParent[i].name === this.state.regionSelected.name){
-                console.log("Valittu regioni kuuluu valittuun regionalleveliin");
-                break;
-            }else{
-                console.log("Valittu regioni ei kuulu valittuun regionalleveliin")
-                this.setState({regionSelected: this.props.regionsDataFromParent[0]}, function() {
+        }else{
+            this.setState({ scenariocollectionSelected: this.state.regionSelected.scenarioCollections[0] }, ()=>{
+                this.setState({ scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0]] }, function(){
                     this.sendNewScenarios();
-                });
-                break;
-            }
+                })
+            });
+        }
+
+        //Checking if selected scenarios are up to date with the selected scenario collection
+
+        //if()
+
+        //console.log("scenarioCollectionSelected: ", this.state.scenariocollectionSelected);
+        //console.log("scenariosDataFromParent[0].scenarios", this.props.scenariosDataFromParent[0].scenarios);
+
+        /*if(this.state.scenariocollectionSelected.includes(this.props.scenariosDataFromParent[0].scenarios)){
+
         }*/
 
-        /*for (var i = 0; i < this.props.regionsDataFromParent.length; i++){
-            //console.log("for this.props.regionsDataFromParent", this.props.regionsDataFromParent[i]);
-            for (var a = 0; a < this.props.regionsDataFromParent[i].scenarioCollections.length; a++){
-                //console.log("for this.props.regionsDataFromParent[i].scenarioCollections[a].name", this.props.regionsDataFromParent[i].scenarioCollections[a].name);
-                //console.log("scenariostate", this.state.scenariocollectionSelected)
-                if(this.props.regionsDataFromParent[i].scenarioCollections[a].name === this.state.scenariocollectionSelected.name){
-                    console.log("Valittu collection kuuluu valitun regionin collectioneihin");
-                    break;
-                }
+        //console.log("Mapatut collectionit[0]: ", scenariocollections[0]);
+
+        /*for(var i = 0; i < scenariocollections.length; i++){
+            console.log("scenariocollections[i]: ", scenariocollections[i])
+            for(var a = 0; a < scenariocollections[i].length; a++){
+                console.log("scenariocollections[i].a: ", scenariocollections[i].a)
             }
-            break;
-        }*/
+            /*scenariocollections.map((collection, a) =>
+            console.log("collection id mapissa: ", collection[a].id, ", collection mapissa: ", collection[a]))
+    }*/
+
+        //console.log("scenario ID:t: ",scenarioIDs)
     }
 
     render () {
@@ -148,17 +144,11 @@ class DropdownMenuScenarios extends React.Component {
 
                 <p>Scenarios</p>
                 <ButtonGroup vertical>
-                {/*{console.log("++++++++++++++++")}
-                {console.log("Region: ", this.state.regionSelected)}
-                {console.log("ScenarioCollection: ", this.state.scenariocollectionSelected)}
-                        {console.log("scenariosDataFromParent: ", )}*/}
                     {this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onCheckboxBtnClick(scenarioi.id)} active={this.state.scenariosSelected.includes(scenarioi.id)}>{scenarioi.name}</Button>)}
+                        <Button color="default" key={i} onClick={() => this.onCheckboxBtnClick(scenarioi.id, scenarioi.name)} active={this.state.scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>)}
                 </ButtonGroup>
-                <p>Selected: {JSON.stringify(this.state.scenariosSelected)}</p>
+                <p>Selected: {JSON.stringify(this.state.scenariosSelectedIDs)}</p>
                 <p>  </p>
-                {/*{console.log("OK")}
-                    {console.log("----------------")}*/}
 
                 <p>Period</p>
                 <ButtonGroup vertical>

@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
     this.state = {
         titleText: "Forest Indicator Service",
-        
+    
         regionalLevelsData: [],
         regionsData: [],
         scenariosData: [],
@@ -55,11 +55,12 @@ class App extends Component {
     })
   };
 
-  callback = (regionalleveli, regioni, scenariocollectioni, scenarioi, periodi) => {
+  callback = (regionalleveli, regioni, scenariocollectioni, scenarioiID, scenarioiName, periodi) => {
     this.setState({selectedRegionallevel : regionalleveli});
     this.setState({selectedRegion: regioni});
     this.setState({selectedScenariocollection: scenariocollectioni});
-    this.setState({selectedScenarios: scenarioi});
+    this.setState({selectedScenarios: {name: scenarioiName,
+                                       id: scenarioiID}});
     this.setState({selectedPeriod: periodi}, () => {
       this.updateScenarioOptions();
     });
