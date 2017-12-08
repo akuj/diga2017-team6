@@ -21,10 +21,10 @@ const natural_nonwood_forestPrducts = [
     'Raspberry crop'
 ];
 const carbon = [
-    '...'
+    'Amount of Carbon'
 ];
 const others = [
-    '...'
+    'Biomass'
 ];
 
 
@@ -36,13 +36,13 @@ class Indicators extends React.Component {
             woodProduction: ['Stump price','Present value of net incomes','Removal','Volume'],
             biodiversity: ['Amount of decaying wood','Number of vascular plants','Coverage of bilberry'],
             natural_nonwood_forestProducts: ['Bilberry crop','Cranberry crop','Dewberry crop','Raspberry crop'],
-            carbon: '...',
-            others: '...',
+            carbon: 'Amount of Carbon',
+            others: 'Biomass',
             checkboxesSelected: []
         };
 
         this.onCheckboxBtnClick = this.onCheckboxBtnClick.bind(this);
-        this.chooseNewIndicator = this.chooseNewIndicator.bind(this);
+
     }
 
     onCheckboxBtnClick(selected) {
@@ -55,28 +55,19 @@ class Indicators extends React.Component {
             this.state.checkboxesSelected.splice(index, 1);
         }
         this.setState({ checkboxesSelected: [...this.state.checkboxesSelected] });
-        this.chooseNewIndicator();
+       
     }
 
-    chooseNewIndicator() {
-        this.props.listNameFromParent(
-            this.state.woodProduction,
-            this.state.biodiversity,
-            this.state.natural_nonwood_forestProducts,
-            this.state.carbon,
-            this.state.others
-        );
-    }
 
     render () {
         return (
             <div>
-                <h2>Choosing Indicators</h2>
+                <h1>Categories</h1>
                 <p>Wood Production</p>
                 <ButtonGroup vertical>
                     {woodProduction.map((indicator1, i) =>
                         <Button
-                        color="grey"
+                        color="default"
                         key={i}
                         onClick={() => this.onCheckboxBtnClick(indicator1)}
                         active={this.state.checkboxesSelected.includes(indicator1)}>
@@ -89,7 +80,7 @@ class Indicators extends React.Component {
                 <ButtonGroup vertical>
                     {biodiversity.map((indicator2, i) =>
                     <Button
-                    color="black"
+                    color="default"
                     key={i}
                     onClick={() => this.onCheckboxBtnClick(indicator2)}
                     active={this.state.checkboxesSelected.includes(indicator2)}>

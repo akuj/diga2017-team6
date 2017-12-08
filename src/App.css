@@ -16,15 +16,17 @@
 }
 
 .App-title {
-  font-size: 1.5em;
+  font: 50px bold georgia;
+  color: white;
 }
 
 .App-intro {
-  font-size: large;
+  font-size: large georgia;
 }
 
 .ScenarioMenu {
-  background-color: greenyellow;
+  padding-left: 20px;
+  
 }
 
 @keyframes App-logo-spin {

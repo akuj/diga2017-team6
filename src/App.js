@@ -31,10 +31,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">            
-        <h1>{this.state.titleText}</h1>
+        <h1 className="App-title">{this.state.titleText}</h1>
           <div className="container">
             <div className="row">          
-                <div className="col-md-3"><DropdownMenuScenarios listNameFromParent={this.callback}/></div>
+                <div className="col-md-3">
+                  <div className="ScenarioMenu"><DropdownMenuScenarios listNameFromParent={this.callback}/></div>
+                </div>
                 <div className="col-md-6"><Graphs/></div>
                 <div className="col-md-3"><Indicators/></div>
             </div>
