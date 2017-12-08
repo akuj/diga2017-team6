@@ -14,10 +14,10 @@ class App extends Component {
         regionsData: [],
         scenariosData: [],
 
-        selectedRegionallevel: {id: 1},
-        selectedRegion: {id: 24},
-        selectedScenariocollection: {id: 6},
-        selectedScenarios: [10],
+        selectedRegionallevel: {},
+        selectedRegion: {},
+        selectedScenariocollection: {},
+        selectedScenarios: {},
         selectedPeriod: {},
 
         ScenarioMenureadytogo: false
@@ -30,7 +30,8 @@ class App extends Component {
       this.setState({ selectedRegionallevel: result[0] }, () => {
         ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id).then(regionresult => {
           this.setState({ regionsData: regionresult });
-          this.setState({ selectedRegion: regionresult[0] }, () => {
+          this.setState({ selectedRegion: regionresult[0] });
+          this.setState({ selectedScenariocollection: regionresult[0].scenarioCollections[0] }, () => {
             ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
               this.setState({ scenariosData: scenarioResult });
               this.setState({ selectedScenariocollection: scenarioResult[0] }, () => {
@@ -49,19 +50,19 @@ class App extends Component {
         ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
           this.setState({ scenariosData: scenarioResult }, function(){
             this.setState({ScenarioMenureadytogo: true});
-          });
-          
+          });      
         })
     })
   };
 
-  callback = (regionalleveli, regioni, scenariocollectioni, scenarioiID, scenarioiName, periodi) => {
+  getChoicesFromScenarioMenu = (regionalleveli, regioni, scenariocollectioni, scenarioiID, scenarioiName, periodiID, periodiYears) => {
     this.setState({selectedRegionallevel : regionalleveli});
     this.setState({selectedRegion: regioni});
     this.setState({selectedScenariocollection: scenariocollectioni});
     this.setState({selectedScenarios: {name: scenarioiName,
                                        id: scenarioiID}});
-    this.setState({selectedPeriod: periodi}, () => {
+    this.setState({selectedPeriod: {years: periodiYears,
+                                    id: periodiID}}, () => {
       this.updateScenarioOptions();
     });
     
@@ -74,7 +75,7 @@ class App extends Component {
         {this.state.ScenarioMenureadytogo ? <DropdownMenuScenarios  regionalLevelsDataFromParent={this.state.regionalLevelsData}
                                                                     regionsDataFromParent={this.state.regionsData}
                                                                     scenariosDataFromParent={this.state.scenariosData}
-                                                                    sendChoicesToApp={this.callback}/>
+                                                                    sendChoicesToApp={this.getChoicesFromScenarioMenu}/>
         : <p>loading</p>}
       </div>
     );

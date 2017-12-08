@@ -6,22 +6,27 @@ class DropdownMenuScenarios extends React.Component {
 
     constructor(props) {
         super(props);
-        this.onCheckboxBtnClick = this.onCheckboxBtnClick.bind(this);
-        this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+        this.onScenarioBtnClick = this.onScenarioBtnClick.bind(this);
+        this.onPeriodBtnClick = this.onPeriodBtnClick.bind(this);
         this.sendNewScenarios = this.sendNewScenarios.bind(this);
-        this.checkEverythingsOk = this.checkEverythingsOk.bind(this);
+        this.checkSelectionIsPartOfOptions = this.checkSelectionIsPartOfOptions.bind(this);
     
         this.state = {
             regionallevelSelected: this.props.regionalLevelsDataFromParent[0],
             regionSelected: this.props.regionsDataFromParent[0],
             scenariocollectionSelected: this.props.regionsDataFromParent[0].scenarioCollections[0],
             scenariosSelectedIDs: [this.props.scenariosDataFromParent[0].scenarios[0].id],
-            scenariosSelectedNames: [this.props.scenariosDataFromParent[0].scenarios[0].name],
-            periodSelected: this.props.scenariosDataFromParent[0].timePeriods[0].id
+            scenariosSelectedNames: [this.props.scenariosDataFromParent[0].scenarios[0].description],
+            periodSelectedID: this.props.scenariosDataFromParent[0].timePeriods[0].id,
+            periodSelectedYears: this.props.scenariosDataFromParent[0].timePeriods[0].yearStart+'-'+this.props.scenariosDataFromParent[0].timePeriods[0].yearEnd
         };
     }
 
-    onCheckboxBtnClick(selectedID, selectedName) {
+    componentDidMount(){
+        this.sendNewScenarios();
+    }
+
+    onScenarioBtnClick(selectedID, selectedName) {
         const index = this.state.scenariosSelectedIDs.indexOf(selectedID);
         if (index < 0) {
           this.state.scenariosSelectedIDs.push(selectedID);
@@ -38,9 +43,11 @@ class DropdownMenuScenarios extends React.Component {
         
     }
 
-    onRadioBtnClick = (radioButtonSelected) => {
-        this.setState({ periodSelected:radioButtonSelected }, () => {
-            this.sendNewScenarios();
+    onPeriodBtnClick = (radioButtonSelectedID, radioButtonSelectedYears) => {
+        this.setState({ periodSelectedID: radioButtonSelectedID }, () => {
+            this.setState({ periodSelectedYears: radioButtonSelectedYears }, ()=>{
+                this.sendNewScenarios();
+            })
         });
     }
 
@@ -50,17 +57,18 @@ class DropdownMenuScenarios extends React.Component {
             this.state.scenariocollectionSelected, 
             this.state.scenariosSelectedIDs,
             this.state.scenariosSelectedNames, 
-            this.state.periodSelected);
+            this.state.periodSelectedID,
+            this.state.periodSelectedYears);
     }
 
-    checkEverythingsOk(){
+    checkSelectionIsPartOfOptions(){
 
         //Checking if selected region is up to date with the selected region
 
         var regionIDs = [];
 
         this.props.regionsDataFromParent.map((region, i) =>  
-        regionIDs.push(region.id));    
+            regionIDs.push(region.id));    
 
         if(regionIDs.includes(this.state.regionSelected.id)){
             
@@ -76,35 +84,43 @@ class DropdownMenuScenarios extends React.Component {
 
         }else{
             this.setState({ scenariocollectionSelected: this.state.regionSelected.scenarioCollections[0] }, ()=>{
-                this.setState({ scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0]] }, function(){
-                    this.sendNewScenarios();
-                })
-            });
+                this.sendNewScenarios();
+            })
         }
 
-        //Checking if selected scenarios are up to date with the selected scenario collection
+        //Checking if scenario options are up to date with the selected scenario collection
 
-        //if()
+        var optionsScenarioIDs = [];
 
-        //console.log("scenarioCollectionSelected: ", this.state.scenariocollectionSelected);
-        //console.log("scenariosDataFromParent[0].scenarios", this.props.scenariosDataFromParent[0].scenarios);
+        this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
+            optionsScenarioIDs.push(scenarioi.id));
 
-        /*if(this.state.scenariocollectionSelected.includes(this.props.scenariosDataFromParent[0].scenarios)){
+        if(optionsScenarioIDs.includes(this.state.scenariosSelectedIDs[0])){
 
-        }*/
+        }else{
+            this.setState({ scenariosSelectedIDs: [this.props.scenariosDataFromParent[0].scenarios[0].id] }, ()=>{
+                this.setState( { scenariosSelectedNames: [this.props.scenariosDataFromParent[0].scenarios[0].description] }, ()=>{
+                    this.sendNewScenarios();
+                } )
+            })
+        }
 
-        //console.log("Mapatut collectionit[0]: ", scenariocollections[0]);
+        //Checking if period options are up to date with the selected scenario collection
 
-        /*for(var i = 0; i < scenariocollections.length; i++){
-            console.log("scenariocollections[i]: ", scenariocollections[i])
-            for(var a = 0; a < scenariocollections[i].length; a++){
-                console.log("scenariocollections[i].a: ", scenariocollections[i].a)
-            }
-            /*scenariocollections.map((collection, a) =>
-            console.log("collection id mapissa: ", collection[a].id, ", collection mapissa: ", collection[a]))
-    }*/
+        var optionsPeriodIDs = [];
 
-        //console.log("scenario ID:t: ",scenarioIDs)
+        this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
+            optionsPeriodIDs.push(periodi.id));
+
+        if(optionsPeriodIDs.includes(this.state.periodSelectedID)){
+
+        }else{
+            this.setState({ periodSelectedID: this.props.scenariosDataFromParent[0].timePeriods[0].id }, ()=>{
+                this.setState({ periodSelectedYears: this.props.scenariosDataFromParent[0].timePeriods[0].yearStart+'-'+this.props.scenariosDataFromParent[0].timePeriods[0].yearEnd }, ()=>{
+                    this.sendNewScenarios();
+                })
+            })
+        }
     }
 
     render () {
@@ -129,7 +145,6 @@ class DropdownMenuScenarios extends React.Component {
                     {this.props.regionsDataFromParent.map((regioni, i) =>
                         <MenuItem eventKey={regioni} key={i}>{regioni.name}</MenuItem>)}
                 </DropdownButton>   
-                {this.checkEverythingsOk()} 
                 <p>  </p> 
 
                 <p>Scenario collection</p>
@@ -145,17 +160,17 @@ class DropdownMenuScenarios extends React.Component {
                 <p>Scenarios</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onCheckboxBtnClick(scenarioi.id, scenarioi.name)} active={this.state.scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>)}
+                        <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi.description)} active={this.state.scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.description}</Button>)}
                 </ButtonGroup>
-                <p>Selected: {JSON.stringify(this.state.scenariosSelectedIDs)}</p>
                 <p>  </p>
 
                 <p>Period</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onRadioBtnClick(periodi.id)} active={this.state.periodSelected===periodi.id}>{periodi.yearStart+"-"+periodi.yearEnd}</Button>)}
+                        <Button color="default" key={i} onClick={() => this.onPeriodBtnClick(periodi.id, periodi.yearStart+"-"+periodi.yearEnd)} active={this.state.periodSelectedID===periodi.id}>{periodi.yearStart+"-"+periodi.yearEnd}</Button>)}
                 </ButtonGroup>
-                {/*<p>Selected: {JSON.stringify(this.state.radioButtonSelected)}</p>*/}  
+
+                {this.checkSelectionIsPartOfOptions()} 
             </div>
         )
     }

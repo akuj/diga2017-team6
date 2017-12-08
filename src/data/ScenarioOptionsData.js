@@ -2,7 +2,6 @@ import axios from 'axios';
 
 function getAllRegionLevelData(){
     
-        // get the data from somewhere?
         return new Promise((resolve, reject) => {
     
             axios.get("http://melatupa.azurewebsites.net/regionLevels", {headers: {'Accept-Language': 'en'}})
@@ -27,7 +26,6 @@ function getRegionData(regionLevelId){
 
         var url = "http://melatupa.azurewebsites.net/regionLevels/"+regionLevelId+"/"+"regions";
     
-        // get the data from somewhere?
         return new Promise((resolve, reject) => {
     
             axios.get(url, {headers: {'Accept-Language': 'en'}})
@@ -54,7 +52,6 @@ function getRegionData(regionLevelId){
         
                 var url = "http://melatupa.azurewebsites.net/scenarioCollection/"+regionId+"/region/"+scenarioCollectionId;
             
-                // get the data from somewhere?
                 return new Promise((resolve, reject) => {
             
                     axios.get(url, {headers: {'Accept-Language': 'en'}})
