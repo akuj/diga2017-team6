@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background: linear-gradient(to bottom right, #2b8859, #c4edd9 );
 }
 
 .App-logo {
@@ -15,15 +16,17 @@
 }
 
 .App-title {
-  font-size: 1.5em;
+  font: 50px bold georgia;
+  color: white;
 }
 
 .App-intro {
-  font-size: large;
+  font-size: large georgia;
 }
 
 .ScenarioMenu {
-  background-color: greenyellow;
+  padding-left: 20px;
+  
 }
 
 @keyframes App-logo-spin {
