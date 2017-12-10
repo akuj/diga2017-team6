@@ -86,14 +86,15 @@ class App extends Component {
                                           sendChoicesToApp={this.getChoicesFromScenarioMenu}/>
                 </div>
               </div>
-              <div className="col-md-6"><Graphs/></div>
+              <div className="col-md-6"><Graphs regionobject = {this.state.region}
+                                                periodobject = {this.state.period} 
+                                                scenarioobject = {this.state.scenario}/>
+              </div>
               <div className="col-md-3"><Indicators scenariosDataFromParent={this.state.scenariosData}
                                                     sendIndicatorChoicesToApp={this.getChoicesFromIndicatorMenu}/></div>
           </div>
         </div> 
           : <p>Loading...</p>}
-          
-
       </div>
     );
   }
