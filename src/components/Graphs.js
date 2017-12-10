@@ -38,10 +38,10 @@ class Graphs extends Component {
                     polar: this.state.polar1,
             },
             title: {
-                text: this.props.regionobject + ' ' + this.props.periodobject
+                text: this.props.regionobject.name + ' ' + this.props.periodobject.yearStart + '-' + this.props.periodobject.yearEnd
             },
             subtitle: {
-                text: 'Scenario ' + this.props.scenarioobject
+                text: this.props.scenarioobject.length>0?'Scenarios: ' + this.props.scenarioobject.map((scenario) => ' '+scenario.description):null
             },
             xAxis: {
                 categories: [
