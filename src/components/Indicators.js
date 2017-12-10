@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {DropdownButton, MenuItem, ButtonGroup, Button} from 'react-bootstrap';
 
+var firstOptionActivated = false;
+var indicatorsSelectedIDs = [];
+
 class Indicators extends React.Component {
 
     constructor (props) {
@@ -11,23 +14,20 @@ class Indicators extends React.Component {
         this.sendNewIndicators = this.sendNewIndicators.bind(this);
 
         this.state = {
-            woodProduction: ['Stump price','Present value of net incomes','Removal','Volume'],
-            biodiversity: ['Amount of decaying wood','Number of vascular plants','Coverage of bilberry'],
-            natural_nonwood_forestProducts: ['Bilberry crop','Cranberry crop','Dewberry crop','Raspberry crop'],
-            carbon: 'Amount of Carbon',
-            others: 'Biomass',
-            indicatorsSelected: []
+            indicatorsSelected: [],
         };
     }
 
     onCheckboxBtnClick(selected) {
-        const index = this.state.indicatorsSelected.indexOf(selected);
+        const index = indicatorsSelectedIDs.indexOf(selected.id);
 
         if (index < 0) {
             this.state.indicatorsSelected.push(selected);
+            indicatorsSelectedIDs.push(selected.id);
         }
         else if(this.state.indicatorsSelected.length>1) {
             this.state.indicatorsSelected.splice(index, 1);
+            indicatorsSelectedIDs.splice(index, 1);
         }
         this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] });
         this.sendNewIndicators();
@@ -35,6 +35,36 @@ class Indicators extends React.Component {
 
     sendNewIndicators(){
         this.props.sendIndicatorChoicesToApp(this.state.indicatorsSelected);
+    }
+
+    checkSelectedIndicatorsArePartOfAvailableOptions(){
+        var optionIDs=[];
+        var atLeastOneIsSelected = false;
+
+        this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorCategory) =>
+        indicatorCategory.indicators.map((indicator, a)=>
+            optionIDs.push(indicator.id)));
+
+        indicatorsSelectedIDs.map((selectedIndicatorID, i) =>
+            {if(optionIDs.includes(selectedIndicatorID)){
+                atLeastOneIsSelected=true;
+            }else{
+                this.onCheckboxBtnClick(this.state.indicatorsSelected[i])
+            }});
+
+        if(!atLeastOneIsSelected){
+            this.onCheckboxBtnClick(this.props.scenariosDataFromParent[0].indicatorCategories[0].indicators[0])
+        }
+    }
+
+    activateFirstOptionInMandatoryCategory(selected){
+        if(!firstOptionActivated){
+            firstOptionActivated=true;
+            this.state.indicatorsSelected.push(selected);
+            indicatorsSelectedIDs.push(selected.id);
+            this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] });
+            this.sendNewIndicators();
+        }
     }
 
     render () {
@@ -45,22 +75,23 @@ class Indicators extends React.Component {
                     <div>
                         {indicatorCategory.isMandatory===1 ? 
                         <div><p>{indicatorCategory.name}*</p>
-                        <ButtonGroup vertical>
+                        <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
                                 <Button color="default" key={indicator.id} 
                                 onClick={() => this.onCheckboxBtnClick(indicator)}
-                                active={this.state.indicatorsSelected.includes(indicator)}>
-                                    {indicator.name}                          
+                                active={indicatorsSelectedIDs.includes(indicator.id)}>
+                                    {indicator.name}     
+                                {this.activateFirstOptionInMandatoryCategory(indicator)}                     
                                 </Button>
                             )}
                         </ButtonGroup></div>
                         :
                         <div><p>{indicatorCategory.name}</p>
-                        <ButtonGroup vertical>
+                        <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
                                 <Button color="default" key={indicator.id} 
                                 onClick={() => this.onCheckboxBtnClick(indicator)}
-                                active={this.state.indicatorsSelected.includes(indicator)}>
+                                active={indicatorsSelectedIDs.includes(indicator.id)}>
                                     {indicator.name} 
                                 </Button>
                             )}
@@ -69,6 +100,7 @@ class Indicators extends React.Component {
                         <p></p>
                     </div>
                 )}
+                {this.checkSelectedIndicatorsArePartOfAvailableOptions()}
             </div>
         );
     }

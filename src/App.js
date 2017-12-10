@@ -57,14 +57,12 @@ class App extends Component {
     })
   };
 
-  getChoicesFromScenarioMenu = (regionalleveli, regioni, scenariocollectioni, scenarioiID, scenarioiName, periodiID, periodiYears) => {
+  getChoicesFromScenarioMenu = (regionalleveli, regioni, scenariocollectioni, scenarioi, periodi) => {
     this.setState({selectedRegionallevel : regionalleveli});
     this.setState({selectedRegion: regioni});
     this.setState({selectedScenariocollection: scenariocollectioni});
-    this.setState({selectedScenarios: {name: scenarioiName,
-                                       id: scenarioiID}});
-    this.setState({selectedPeriod: {years: periodiYears,
-                                    id: periodiID}}, () => {
+    this.setState({selectedScenarios: scenarioi});
+    this.setState({selectedPeriod: periodi}, () => {
       this.updateScenarioOptions();
     });
   }
