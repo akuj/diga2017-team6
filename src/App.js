@@ -7,8 +7,6 @@ import Graphs from './components/Graphs';
 import DropdownMenuScenarios from './components/DropdownMenuScenarios';
 import Indicators from './components/Indicators';
 
-
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -24,8 +22,9 @@ class App extends Component {
         selectedScenariocollection: {},
         selectedScenarios: {},
         selectedPeriod: {},
+        selectedIndicators: [],
 
-        ScenarioMenureadytogo: false
+        dataGotFromAPI: false
       };    
   }
 
@@ -40,7 +39,7 @@ class App extends Component {
             ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
               this.setState({ scenariosData: scenarioResult });
               this.setState({ selectedScenariocollection: scenarioResult[0] }, () => {
-                this.setState({ScenarioMenureadytogo: true});
+                this.setState({dataGotFromAPI: true});
               })
             })
           })
@@ -53,43 +52,47 @@ class App extends Component {
     ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id).then(regionresult => {
         this.setState({ regionsData: regionresult });
         ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
-          this.setState({ scenariosData: scenarioResult }, function(){
-            this.setState({ScenarioMenureadytogo: true});
-          });      
-        })
+          this.setState({ scenariosData: scenarioResult });
+        });      
     })
   };
 
-  getChoicesFromScenarioMenu = (regionalleveli, regioni, scenariocollectioni, scenarioiID, scenarioiName, periodiID, periodiYears) => {
+  getChoicesFromScenarioMenu = (regionalleveli, regioni, scenariocollectioni, scenarioi, periodi) => {
     this.setState({selectedRegionallevel : regionalleveli});
     this.setState({selectedRegion: regioni});
     this.setState({selectedScenariocollection: scenariocollectioni});
-    this.setState({selectedScenarios: {name: scenarioiName,
-                                       id: scenarioiID}});
-    this.setState({selectedPeriod: {years: periodiYears,
-                                    id: periodiID}}, () => {
+    this.setState({selectedScenarios: scenarioi});
+    this.setState({selectedPeriod: periodi}, () => {
       this.updateScenarioOptions();
     });
+  }
+
+  getChoicesFromIndicatorMenu = (gottenIndicators) => {
+    this.setState({selectedIndicators: gottenIndicators});
   }
 
   render() {
     return (
       <div className="App">            
         <h1 className="App-title">{this.state.titleText}</h1>
+        {this.state.dataGotFromAPI ? 
           <div className="container">
-            <div className="row">          
-                <div className="col-md-3">
-                  <div className="ScenarioMenu">{this.state.ScenarioMenureadytogo ? 
-                                            <DropdownMenuScenarios  regionalLevelsDataFromParent={this.state.regionalLevelsData}
-                                                                    regionsDataFromParent={this.state.regionsData}
-                                                                    scenariosDataFromParent={this.state.scenariosData}
-                                                                    sendChoicesToApp={this.getChoicesFromScenarioMenu}/>
-                                            : <p>loading</p>}</div>
+          <div className="row">          
+              <div className="col-md-3">
+                <div className="ScenarioMenu"> 
+                  <DropdownMenuScenarios  regionalLevelsDataFromParent={this.state.regionalLevelsData}
+                                          regionsDataFromParent={this.state.regionsData}
+                                          scenariosDataFromParent={this.state.scenariosData}
+                                          sendChoicesToApp={this.getChoicesFromScenarioMenu}/>
                 </div>
-                <div className="col-md-6"><Graphs/></div>
-                <div className="col-md-3"><Indicators/></div>
-            </div>
+              </div>
+              <div className="col-md-6"><Graphs/></div>
+              <div className="col-md-3"><Indicators scenariosDataFromParent={this.state.scenariosData}
+                                                    sendIndicatorChoicesToApp={this.getChoicesFromIndicatorMenu}/></div>
           </div>
+        </div> 
+          : <p>Loading...</p>}
+          
 
       </div>
     );

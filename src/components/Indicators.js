@@ -2,130 +2,105 @@ import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {DropdownButton, MenuItem, ButtonGroup, Button} from 'react-bootstrap';
 
-
-const woodProduction = [
-    'Stump Price',
-    'Present value of net incomes',
-    'Removal',
-    'Volume'
-];
-const biodiversity = [
-    'Amount of decaying wood',
-    'Number of vascular plants',
-    'Coverage of bilberry'
-];
-const natural_nonwood_forestPrducts = [
-    'Bilberry crop',    
-    'Cranberry crop',
-    'Dewberry crop',
-    'Raspberry crop'
-];
-const carbon = [
-    'Amount of Carbon'
-];
-const others = [
-    'Biomass'
-];
-
+var firstOptionActivated = false;
+var indicatorsSelectedIDs = [];
 
 class Indicators extends React.Component {
-    
+
     constructor (props) {
         super(props);
-        this.state = {
-            woodProduction: ['Stump price','Present value of net incomes','Removal','Volume'],
-            biodiversity: ['Amount of decaying wood','Number of vascular plants','Coverage of bilberry'],
-            natural_nonwood_forestProducts: ['Bilberry crop','Cranberry crop','Dewberry crop','Raspberry crop'],
-            carbon: 'Amount of Carbon',
-            others: 'Biomass',
-            checkboxesSelected: []
-        };
 
         this.onCheckboxBtnClick = this.onCheckboxBtnClick.bind(this);
+        this.sendNewIndicators = this.sendNewIndicators.bind(this);
 
+        this.state = {
+            indicatorsSelected: [],
+        };
     }
 
     onCheckboxBtnClick(selected) {
-        const index = this.state.checkboxesSelected.indexOf(selected);
+        const index = indicatorsSelectedIDs.indexOf(selected.id);
 
         if (index < 0) {
-            this.state.checkboxesSelected.push(selected);
+            this.state.indicatorsSelected.push(selected);
+            indicatorsSelectedIDs.push(selected.id);
         }
-        else if(this.state.checkboxesSelected.length>1) {
-            this.state.checkboxesSelected.splice(index, 1);
+        else if(this.state.indicatorsSelected.length>1) {
+            this.state.indicatorsSelected.splice(index, 1);
+            indicatorsSelectedIDs.splice(index, 1);
         }
-        this.setState({ checkboxesSelected: [...this.state.checkboxesSelected] });
-       
+        this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] });
+        this.sendNewIndicators();
     }
 
+    sendNewIndicators(){
+        this.props.sendIndicatorChoicesToApp(this.state.indicatorsSelected);
+    }
+
+    checkSelectedIndicatorsArePartOfAvailableOptions(){
+        var optionIDs=[];
+        var atLeastOneIsSelected = false;
+
+        this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorCategory) =>
+        indicatorCategory.indicators.map((indicator, a)=>
+            optionIDs.push(indicator.id)));
+
+        indicatorsSelectedIDs.map((selectedIndicatorID, i) =>
+            {if(optionIDs.includes(selectedIndicatorID)){
+                atLeastOneIsSelected=true;
+            }else{
+                this.onCheckboxBtnClick(this.state.indicatorsSelected[i])
+            }});
+
+        if(!atLeastOneIsSelected){
+            this.onCheckboxBtnClick(this.props.scenariosDataFromParent[0].indicatorCategories[0].indicators[0])
+        }
+    }
+
+    activateFirstOptionInMandatoryCategory(selected){
+        if(!firstOptionActivated){
+            firstOptionActivated=true;
+            this.state.indicatorsSelected.push(selected);
+            indicatorsSelectedIDs.push(selected.id);
+            this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] });
+            this.sendNewIndicators();
+        }
+    }
 
     render () {
         return (
             <div>
-                <h1>Categories</h1>
-                <p>Wood Production</p>
-                <ButtonGroup vertical>
-                    {woodProduction.map((indicator1, i) =>
-                        <Button
-                        color="default"
-                        key={i}
-                        onClick={() => this.onCheckboxBtnClick(indicator1)}
-                        active={this.state.checkboxesSelected.includes(indicator1)}>
-                        {indicator1}
-                        </Button>
-                    )}
-                </ButtonGroup>
-                
-                <p>Biodiversity</p>
-                <ButtonGroup vertical>
-                    {biodiversity.map((indicator2, i) =>
-                    <Button
-                    color="default"
-                    key={i}
-                    onClick={() => this.onCheckboxBtnClick(indicator2)}
-                    active={this.state.checkboxesSelected.includes(indicator2)}>
-                    {indicator2}
-                    </Button>
-                    )}
-                </ButtonGroup>
-                
-                <p>Natural/Non-wood Production</p>
-                <ButtonGroup vertical>
-                    {natural_nonwood_forestPrducts.map((indicator3, i) =>
-                    <Button
-                    color="default"
-                    key={i}
-                    onClick={() => this.onCheckboxBtnClick(indicator3)}
-                    active={this.state.checkboxesSelected.includes(indicator3)}>
-                    {indicator3}
-                    </Button>
-                    )}
-                </ButtonGroup>
-
-                <p>Carbon</p>
-                <ButtonGroup vertical>
-                    {carbon.map((indicator4, i) =>
-                    <Button
-                    color="default"
-                    key={i}
-                    onClick={() => this.onCheckboxBtnClick(indicator4)}>
-                    {indicator4}
-                    </Button>
-                    )}
-                </ButtonGroup>
-
-                <p>Others</p>
-                <ButtonGroup vertical>
-                    {others.map((indicator5, i) =>
-                    <Button
-                    color="default"
-                    key={i}
-                    onClick={() => this.onCheckboxBtnClick(indicator5)}>
-                    {indicator5}
-                    </Button>
-                    )}
-                </ButtonGroup>
-
+                <h1>Indicators</h1>         
+                {this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorCategory, i) =>
+                    <div>
+                        {indicatorCategory.isMandatory===1 ? 
+                        <div><p>{indicatorCategory.name}*</p>
+                        <ButtonGroup vertical key={i}>
+                            {indicatorCategory.indicators.map((indicator, a)=>
+                                <Button color="default" key={indicator.id} 
+                                onClick={() => this.onCheckboxBtnClick(indicator)}
+                                active={indicatorsSelectedIDs.includes(indicator.id)}>
+                                    {indicator.name}     
+                                {this.activateFirstOptionInMandatoryCategory(indicator)}                     
+                                </Button>
+                            )}
+                        </ButtonGroup></div>
+                        :
+                        <div><p>{indicatorCategory.name}</p>
+                        <ButtonGroup vertical key={i}>
+                            {indicatorCategory.indicators.map((indicator, a)=>
+                                <Button color="default" key={indicator.id} 
+                                onClick={() => this.onCheckboxBtnClick(indicator)}
+                                active={indicatorsSelectedIDs.includes(indicator.id)}>
+                                    {indicator.name} 
+                                </Button>
+                            )}
+                        </ButtonGroup></div>
+                        }
+                        <p></p>
+                    </div>
+                )}
+                {this.checkSelectedIndicatorsArePartOfAvailableOptions()}
             </div>
         );
     }

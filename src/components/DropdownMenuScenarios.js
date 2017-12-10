@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {DropdownButton, MenuItem, ButtonGroup, Button} from 'react-bootstrap';
 
+var scenariosSelectedIDs = [];
+var periodSelectedID = "";
+
 class DropdownMenuScenarios extends React.Component {
 
     constructor(props) {
@@ -10,15 +13,16 @@ class DropdownMenuScenarios extends React.Component {
         this.onPeriodBtnClick = this.onPeriodBtnClick.bind(this);
         this.sendNewScenarios = this.sendNewScenarios.bind(this);
         this.checkSelectionIsPartOfOptions = this.checkSelectionIsPartOfOptions.bind(this);
+
+        scenariosSelectedIDs = [this.props.scenariosDataFromParent[0].scenarios[0].id];
+        periodSelectedID = this.props.scenariosDataFromParent[0].timePeriods[0].id;
     
         this.state = {
             regionallevelSelected: this.props.regionalLevelsDataFromParent[0],
             regionSelected: this.props.regionsDataFromParent[0],
             scenariocollectionSelected: this.props.regionsDataFromParent[0].scenarioCollections[0],
-            scenariosSelectedIDs: [this.props.scenariosDataFromParent[0].scenarios[0].id],
-            scenariosSelectedNames: [this.props.scenariosDataFromParent[0].scenarios[0].description],
-            periodSelectedID: this.props.scenariosDataFromParent[0].timePeriods[0].id,
-            periodSelectedYears: this.props.scenariosDataFromParent[0].timePeriods[0].yearStart+'-'+this.props.scenariosDataFromParent[0].timePeriods[0].yearEnd
+            scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0]],
+            periodSelected: this.props.scenariosDataFromParent[0].timePeriods[0]
         };
     }
 
@@ -26,39 +30,33 @@ class DropdownMenuScenarios extends React.Component {
         this.sendNewScenarios();
     }
 
-    onScenarioBtnClick(selectedID, selectedName) {
-        const index = this.state.scenariosSelectedIDs.indexOf(selectedID);
+    onScenarioBtnClick(selectedID, selected) {
+        const index = scenariosSelectedIDs.indexOf(selectedID);
         if (index < 0) {
-          this.state.scenariosSelectedIDs.push(selectedID);
-          this.state.scenariosSelectedNames.push(selectedName);
-        } else if(this.state.scenariosSelectedIDs.length>1){
-          this.state.scenariosSelectedIDs.splice(index, 1);
-          this.state.scenariosSelectedNames.splice(index, 1);
+          scenariosSelectedIDs.push(selectedID);
+          this.state.scenariosSelected.push(selected);
+        } else if(scenariosSelectedIDs.length>1){
+          scenariosSelectedIDs.splice(index, 1);
+          this.state.scenariosSelected.splice(index, 1);
         }
-        this.setState({ scenariosSelectedIDs: [...this.state.scenariosSelectedIDs] }, ()=> {
-            this.setState({ scenariosSelectedNames: [...this.state.scenariosSelectedNames] }, ()=> {
-                this.sendNewScenarios();
-            })
+        this.setState({ scenariosSelectedNames: [...this.state.scenariosSelected] }, ()=> {
+            this.sendNewScenarios();
         });
-        
     }
 
-    onPeriodBtnClick = (radioButtonSelectedID, radioButtonSelectedYears) => {
-        this.setState({ periodSelectedID: radioButtonSelectedID }, () => {
-            this.setState({ periodSelectedYears: radioButtonSelectedYears }, ()=>{
-                this.sendNewScenarios();
-            })
-        });
+    onPeriodBtnClick = (radioButtonSelectedID, radioButtonSelected) => {
+        periodSelectedID = radioButtonSelectedID;
+        this.setState({ periodSelected: radioButtonSelected }, ()=>{
+            this.sendNewScenarios();
+        })        
     }
 
     sendNewScenarios(){
         this.props.sendChoicesToApp(this.state.regionallevelSelected, 
             this.state.regionSelected, 
             this.state.scenariocollectionSelected, 
-            this.state.scenariosSelectedIDs,
-            this.state.scenariosSelectedNames, 
-            this.state.periodSelectedID,
-            this.state.periodSelectedYears);
+            this.state.scenariosSelected, 
+            this.state.periodSelected);
     }
 
     checkSelectionIsPartOfOptions(){
@@ -95,14 +93,13 @@ class DropdownMenuScenarios extends React.Component {
         this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
             optionsScenarioIDs.push(scenarioi.id));
 
-        if(optionsScenarioIDs.includes(this.state.scenariosSelectedIDs[0])){
+        if(optionsScenarioIDs.includes(scenariosSelectedIDs[0])){
 
         }else{
-            this.setState({ scenariosSelectedIDs: [this.props.scenariosDataFromParent[0].scenarios[0].id] }, ()=>{
-                this.setState( { scenariosSelectedNames: [this.props.scenariosDataFromParent[0].scenarios[0].description] }, ()=>{
-                    this.sendNewScenarios();
-                } )
-            })
+            scenariosSelectedIDs = [this.props.scenariosDataFromParent[0].scenarios[0].id];
+            this.setState( { scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0]] }, ()=>{
+                this.sendNewScenarios();
+            } )        
         }
 
         //Checking if period options are up to date with the selected scenario collection
@@ -112,14 +109,13 @@ class DropdownMenuScenarios extends React.Component {
         this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
             optionsPeriodIDs.push(periodi.id));
 
-        if(optionsPeriodIDs.includes(this.state.periodSelectedID)){
+        if(optionsPeriodIDs.includes(periodSelectedID)){
 
         }else{
-            this.setState({ periodSelectedID: this.props.scenariosDataFromParent[0].timePeriods[0].id }, ()=>{
-                this.setState({ periodSelectedYears: this.props.scenariosDataFromParent[0].timePeriods[0].yearStart+'-'+this.props.scenariosDataFromParent[0].timePeriods[0].yearEnd }, ()=>{
-                    this.sendNewScenarios();
-                })
-            })
+            periodSelectedID = this.props.scenariosDataFromParent[0].timePeriods[0].id;
+            this.setState({ periodSelected: this.props.scenariosDataFromParent[0].timePeriods[0] }, ()=>{
+                this.sendNewScenarios();
+            })        
         }
     }
 
@@ -160,14 +156,14 @@ class DropdownMenuScenarios extends React.Component {
                 <p>Scenarios</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi.description)} active={this.state.scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.description}</Button>)}
+                        <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.description}</Button>)}
                 </ButtonGroup>
                 <p>  </p>
 
                 <p>Period</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onPeriodBtnClick(periodi.id, periodi.yearStart+"-"+periodi.yearEnd)} active={this.state.periodSelectedID===periodi.id}>{periodi.yearStart+"-"+periodi.yearEnd}</Button>)}
+                        <Button color="default" key={i} onClick={() => this.onPeriodBtnClick(periodi.id, periodi)} active={periodSelectedID===periodi.id}>{periodi.yearStart+"-"+periodi.yearEnd}</Button>)}
                 </ButtonGroup>
 
                 {this.checkSelectionIsPartOfOptions()} 
