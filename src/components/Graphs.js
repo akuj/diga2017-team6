@@ -6,42 +6,106 @@ const ReactHighcharts = require('react-highcharts');
 
 class Graphs extends Component {
 
+    config;
     constructor (props) {
         super(props);
     
         this.state = { rSelected: 'column', polar1: false};
     
         this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
+
+        global.Highcharts = require('highcharts');
+        //require('highcharts/modules/exporting')(global.Highcharts);
+        //global.HighchartsMore = require('highcharts-more');
       }
 
     onRadioBtnClick(rSelected) {
-        if (this.state.rSelected === 'polar')
+        this.setState({ rSelected });
+        /*if (this.state.rSelected === 'polar')
         {
-            this.setState({ polar1: true });
+            //this.setState({ polar1: true });
+            this.setState({ rSelected });
         }
         else(this.state.rSelected !== 'polar')
         {
             this.setState({ polar1: false });
             this.setState({ rSelected });
-        }
+        }*/
       }
 
   render () {
 
+    if (this.state.rSelected === 'polar') {
+        this.config = {     
+                    chart: {
+                        polar: true
+                    },
+                
+                    title: {
+                        text: 'Highcharts Polar Chart'
+                    },
+                
+                    pane: {
+                        startAngle: 0,
+                        endAngle: 360
+                    },
+                
+                    xAxis: {
+                        tickInterval: 45,
+                        min: 0,
+                        max: 360,
+                        labels: {
+                            formatter: function () {
+                                return this.value + '°';
+                            }
+                        }
+                    },
+                
+                    yAxis: {
+                        min: 0
+                    },
+                
+                    plotOptions: {
+                        series: {
+                            pointStart: 0,
+                            pointInterval: 45
+                        },
+                        column: {
+                            pointPadding: 0,
+                            groupPadding: 0
+                        }
+                    },
+                
+                    series: [{
+                        type: 'column',
+                        name: 'Column',
+                        data: [8, 7, 6, 5, 4, 3, 2, 1],
+                        pointPlacement: 'between'
+                    }, {
+                        type: 'line',
+                        name: 'Line',
+                        data: [1, 2, 3, 4, 5, 6, 7, 8]
+                    }, {
+                        type: 'area',
+                        name: 'Area',
+                        data: [1, 8, 2, 7, 3, 6, 4, 5]
+                    }]
+        }
+    }
 
-      var config = {
+    else (this.state.rSelected !== 'polar')
+    {
+      this.config = {
         
             chart: {
                 //{this.state.polar1 ? '' : type: this.state.rSelected}
                     type: this.state.rSelected,
-                    
-                    polar: this.state.polar1,
             },
             title: {
                 text: this.props.regionobject + ' ' + this.props.periodobject
             },
             subtitle: {
-                text: 'Scenario ' + this.props.scenarioobject
+                text: 'Scenario: ' + this.props.scenarioobject
             },
             xAxis: {
                 categories: [
@@ -110,11 +174,12 @@ class Graphs extends Component {
         
             }]
     };
+}
 
     return (
       <div>
         <h1>
-          <ReactHighcharts config = {config}></ReactHighcharts>
+          <ReactHighcharts config = {this.config}></ReactHighcharts>
         </h1>
 
         <ButtonGroup>
