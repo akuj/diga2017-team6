@@ -122,8 +122,8 @@ class DropdownMenuScenarios extends React.Component {
     render () {
         return (
             <div style={{textAlign:"left"}}>
-                <h1>Scenarios</h1>
-                <p>Regional level</p>
+                <h1>{this.props.language==='fi'?'Skenaariot':'Scenarios'}</h1>
+                <p>{this.props.language==='fi'?'Aluetaso':'Regional level'}</p>
                 <DropdownButton title={this.state.regionallevelSelected.name} id="1" onSelect={(evt)=>{
                     this.setState({regionallevelSelected: evt}, function() {
                         this.sendNewScenarios();
@@ -133,7 +133,7 @@ class DropdownMenuScenarios extends React.Component {
                 </DropdownButton>  
                 <p>  </p> 
 
-                <p>Region</p>
+                <p>{this.props.language==='fi'?'Alue':'Region'}</p>
                 <DropdownButton title={this.state.regionSelected.name} id="2" onSelect={(evt)=>{
                     this.setState({regionSelected: evt}, function() {
                         this.sendNewScenarios();
@@ -143,7 +143,7 @@ class DropdownMenuScenarios extends React.Component {
                 </DropdownButton>   
                 <p>  </p> 
 
-                <p>Scenario collection</p>
+                <p>{this.props.language==='fi'?'Skenaariokokoelma':'Scenario collection'}</p>
                 <DropdownButton title={this.state.scenariocollectionSelected.name} id="3" onSelect={(evt)=>{
                         this.setState({scenariocollectionSelected: evt}, () => {
                             this.sendNewScenarios();
@@ -153,14 +153,14 @@ class DropdownMenuScenarios extends React.Component {
                 </DropdownButton>  
                 <p>  </p> 
 
-                <p>Scenarios</p>
+                <p>{this.props.language==='fi'?'Skenaariot':'Scenarios'}</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
                         <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.description}</Button>)}
                 </ButtonGroup>
                 <p>  </p>
 
-                <p>Period</p>
+                <p>{this.props.language==='fi'?'Ajankohta':'Period'}</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
                         <Button color="default" key={i} onClick={() => this.onPeriodBtnClick(periodi.id, periodi)} active={periodSelectedID===periodi.id}>{periodi.yearStart+"-"+periodi.yearEnd}</Button>)}

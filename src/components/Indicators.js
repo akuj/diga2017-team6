@@ -70,7 +70,7 @@ class Indicators extends React.Component {
     render () {
         return (
             <div>
-                <h1>Indicators</h1>         
+                <h1>{this.props.language==='fi'?'Indikaattorit':'Indicators'}</h1>         
                 {this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorCategory, i) =>
                     <div>
                         {indicatorCategory.isMandatory===1 ? 

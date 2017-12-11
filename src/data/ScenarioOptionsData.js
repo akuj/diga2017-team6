@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-function getAllRegionLevelData(){
+function getAllRegionLevelData(language){
     
         return new Promise((resolve, reject) => {
     
-            axios.get("http://melatupa.azurewebsites.net/regionLevels", {headers: {'Accept-Language': 'en'}})
+            axios.get("http://melatupa.azurewebsites.net/regionLevels", {headers: {'Accept-Language': language}})
             .then(results => {
                 console.log("Region levels data: ", results);
                 const regionLevels = results.data.map(element => {
@@ -22,13 +22,13 @@ function getAllRegionLevelData(){
         });
     }
 
-function getRegionData(regionLevelId){
+function getRegionData(regionLevelId, language){
 
         var url = "http://melatupa.azurewebsites.net/regionLevels/"+regionLevelId+"/"+"regions";
     
         return new Promise((resolve, reject) => {
     
-            axios.get(url, {headers: {'Accept-Language': 'en'}})
+            axios.get(url, {headers: {'Accept-Language': language}})
             .then(regionresults => {
                 console.log("Regions data: ", regionresults);
                 const regions = regionresults.data.map(element => {
@@ -48,13 +48,13 @@ function getRegionData(regionLevelId){
     }
 
     
-    function getScenarioCollectionData(scenarioCollectionId, regionId){
+    function getScenarioCollectionData(scenarioCollectionId, regionId, language){
         
                 var url = "http://melatupa.azurewebsites.net/scenarioCollection/"+regionId+"/region/"+scenarioCollectionId;
             
                 return new Promise((resolve, reject) => {
             
-                    axios.get(url, {headers: {'Accept-Language': 'en'}})
+                    axios.get(url, {headers: {'Accept-Language': language}})
                     .then(scenarioresults => {
                         console.log("Scenarios data: ", scenarioresults);
                         const scenarios = scenarioresults.data.map(element => {
