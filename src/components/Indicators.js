@@ -69,6 +69,15 @@ class Indicators extends React.Component {
         }
     }
 
+    isSelectedIndicator = (indikator) => {
+        return indikator.id === this.state.indicatorsSelected[0].id;
+    }
+
+    changeLanguageOfSelections(){
+        //Check selected indicators are in the selected language
+        
+    }
+
     render () {
         return (
             <div>

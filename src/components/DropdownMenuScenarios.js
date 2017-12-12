@@ -14,7 +14,6 @@ class DropdownMenuScenarios extends React.Component {
         this.sendNewScenarios = this.sendNewScenarios.bind(this);
         this.checkSelectionIsPartOfOptions = this.checkSelectionIsPartOfOptions.bind(this);
         this.checkSelectionIsInCorrectLanguage = this.checkSelectionIsInCorrectLanguage.bind(this);
-        //this.isSelectedRegionalLevel = this.isSelectedRegionalLevel.bind(this);
 
         scenariosSelectedIDs = [this.props.scenariosDataFromParent[0].scenarios[0].id];
         periodSelectedID = this.props.scenariosDataFromParent[0].timePeriods[0].id;
@@ -107,6 +106,7 @@ class DropdownMenuScenarios extends React.Component {
                 {if(this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
                     return skenario.id === scenario.id;
                 }).description!==scenario.description){
+                    console.log("333333333333");
                     let newScenarios = this.state.scenariosSelected.slice();
                     newScenarios[i] = this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
                         return skenario.id === scenario.id;
@@ -225,7 +225,7 @@ class DropdownMenuScenarios extends React.Component {
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0]===undefined?'Error':
                     this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.description}</Button>)}
+                        <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>)}
                 </ButtonGroup>
                 <p>  </p>
 

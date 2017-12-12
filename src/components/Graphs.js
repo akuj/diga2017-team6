@@ -41,7 +41,7 @@ class Graphs extends Component {
                 text: this.props.regionobject.name + ' ' + this.props.periodobject.yearStart + '-' + this.props.periodobject.yearEnd
             },
             subtitle: {
-                text: this.props.scenarioobject.length>0?'Scenarios: ' + this.props.scenarioobject.map((scenario) => ' '+scenario.description):null
+                text: this.props.scenarioobject.length>0?'Scenarios: ' + this.props.scenarioobject.map((scenario) => ' '+scenario.name):null
             },
             xAxis: {
                 categories: [
