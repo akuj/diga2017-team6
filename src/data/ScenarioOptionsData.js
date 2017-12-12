@@ -48,15 +48,18 @@ function getRegionData(regionLevelId, language){
     }
 
     
-    function getScenarioCollectionData(scenarioCollectionId, regionId, language){
+    function getScenarioCollectionData(regionId, scenarioCollectionId, language){
         
-                var url = "http://melatupa.azurewebsites.net/scenarioCollection/"+regionId+"/region/"+scenarioCollectionId;
+                var url = "http://melatupa.azurewebsites.net/scenarioCollection/"+scenarioCollectionId+"/region/"+regionId;
             
                 return new Promise((resolve, reject) => {
             
                     axios.get(url, {headers: {'Accept-Language': language}})
                     .then(scenarioresults => {
                         console.log("Scenarios data: ", scenarioresults);
+                        console.log("URL: ", url);
+                        console.log("regionID: ", regionId);
+                        console.log("scenariocollectionID: ", scenarioCollectionId);
                         const scenarios = scenarioresults.data.map(element => {
                             element.name = element.name;
                             element.description = element.description;

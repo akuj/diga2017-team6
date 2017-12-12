@@ -73,6 +73,9 @@ class App extends Component {
 
   getLanguageSelection = (language) => {
     this.setState({ selectedLanguage:language }, ()=> {
+      ScenarioOptionsData.getAllRegionLevelData(this.state.selectedLanguage).then(result => {
+        this.setState({ regionalLevelsData: result });
+      })
       this.updateScenarioOptions();
     });
   }
