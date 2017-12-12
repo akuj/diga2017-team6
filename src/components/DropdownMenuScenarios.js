@@ -156,7 +156,7 @@ class DropdownMenuScenarios extends React.Component {
                 <p>Scenarios</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.description}</Button>)}
+                        <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>)}
                 </ButtonGroup>
                 <p>  </p>
 
