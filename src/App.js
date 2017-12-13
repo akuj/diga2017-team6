@@ -35,10 +35,12 @@ class App extends Component {
           <div className="container">
             <div className="row">          
                 <div className="col-md-3">
-                  <div className="ScenarioMenu"><DropdownMenuScenarios listNameFromParent={this.callback}/></div>
+                  <div className="ScenarioMenu"><DropdownMenuScenarios listNameFromParent={this.callback}/></div>                  
                 </div>
                 <div className="col-md-6"><Graphs/></div>
-                <div className="col-md-3"><Indicators/></div>
+                <div className="col-md-3">
+                  <div className="IndicatorMenu"><Indicators/></div>
+                </div>
             </div>
           </div>
       </div>
