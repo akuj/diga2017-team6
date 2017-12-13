@@ -106,7 +106,6 @@ class DropdownMenuScenarios extends React.Component {
                 {if(this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
                     return skenario.id === scenario.id;
                 }).description!==scenario.description){
-                    console.log("333333333333");
                     let newScenarios = this.state.scenariosSelected.slice();
                     newScenarios[i] = this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
                         return skenario.id === scenario.id;

@@ -12,6 +12,7 @@ class Indicators extends React.Component {
 
         this.onCheckboxBtnClick = this.onCheckboxBtnClick.bind(this);
         this.sendNewIndicators = this.sendNewIndicators.bind(this);
+        this.changeLanguageOfSelections = this.changeLanguageOfSelections.bind(this);
 
         this.state = {
             indicatorsSelected: [],
@@ -57,6 +58,8 @@ class Indicators extends React.Component {
                 this.onCheckboxBtnClick(this.props.scenariosDataFromParent[0].indicatorCategories[0].indicators[0])
             }
         }
+
+        this.changeLanguageOfSelections();
     }
 
     activateFirstOptionInMandatoryCategory(selected){
@@ -69,13 +72,30 @@ class Indicators extends React.Component {
         }
     }
 
-    isSelectedIndicator = (indikator) => {
-        return indikator.id === this.state.indicatorsSelected[0].id;
-    }
-
     changeLanguageOfSelections(){
+        var availableIndicators = [];
+
         //Check selected indicators are in the selected language
-        
+        if(this.props.scenariosDataFromParent!==undefined){
+            this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorcategory, i)=>
+            indicatorcategory.indicators.map((indicator, a)=>
+                availableIndicators.push(indicator)));
+
+            this.state.indicatorsSelected.map((indicator, i)=>
+                {if(availableIndicators.find(function isSelectedIndicator(indikator){
+                    return indikator.id === indicator.id;
+                    }).description!==indicator.description){
+                        let newIndicators = this.state.indicatorsSelected.slice();
+                        newIndicators[i] = availableIndicators.find(function isSelectedIndicator(indikator){
+                            return indikator.id === indicator.id;
+                            })
+                        this.setState({ indicatorsSelected : newIndicators }, () => {
+                            this.sendNewIndicators();
+                        })
+                    }
+                }
+            )
+        }
     }
 
     render () {
