@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {DropdownButton, MenuItem, ButtonGroup, Button} from 'react-bootstrap';
 
@@ -13,6 +13,7 @@ class DropdownMenuScenarios extends React.Component {
         this.onPeriodBtnClick = this.onPeriodBtnClick.bind(this);
         this.sendNewScenarios = this.sendNewScenarios.bind(this);
         this.checkSelectionIsPartOfOptions = this.checkSelectionIsPartOfOptions.bind(this);
+        this.checkSelectionIsInCorrectLanguage = this.checkSelectionIsInCorrectLanguage.bind(this);
 
         scenariosSelectedIDs = [this.props.scenariosDataFromParent[0].scenarios[0].id];
         periodSelectedID = this.props.scenariosDataFromParent[0].timePeriods[0].id;
@@ -59,6 +60,64 @@ class DropdownMenuScenarios extends React.Component {
             this.state.periodSelected);
     }
 
+    isSelectedRegionalLevel = (regionalLevel) =>{
+        return regionalLevel.id === this.state.regionallevelSelected.id;
+    }
+
+    isSelectedRegion = (region) => {
+        return region.id === this.state.regionSelected.id;
+    }
+
+    isSelectedCollection = (collection) => {
+        return collection.id === this.state.scenariocollectionSelected.id;
+    }
+
+    isSelectedScenario = (skenario) => {
+        return skenario.id === this.state.scenariosSelected[0].id;
+    }
+
+    checkSelectionIsInCorrectLanguage = () => {
+        //Check selected regional level is in the selected language
+        if(this.props.regionalLevelsDataFromParent.find(this.isSelectedRegionalLevel)!==this.state.regionallevelSelected){
+            this.setState({ regionallevelSelected :  this.props.regionalLevelsDataFromParent.find(this.isSelectedRegionalLevel)}, () => {
+                this.sendNewScenarios();
+            })
+        }
+
+        //Check selected region is in the selected language
+        if(this.props.regionsDataFromParent.find(this.isSelectedRegion)!==undefined){
+            if(this.props.regionsDataFromParent.find(this.isSelectedRegion).scenarioCollections[0].description!==this.state.regionSelected.scenarioCollections[0].description){
+                this.setState({ regionSelected : this.props.regionsDataFromParent.find(this.isSelectedRegion) }, () => {
+                    this.setState({ scenariocollectionSelected : this.state.regionSelected.scenarioCollections.find(this.isSelectedCollection)}, () => {
+                        this.sendNewScenarios();
+                    })
+                })
+            }
+        }
+        
+        //Check selected scenarios are in the selected language
+        if(this.props.scenariosDataFromParent[0]!==undefined){
+            this.state.scenariosSelected.map((scenario, i)=>
+            {if(this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
+                return skenario.id === scenario.id;
+            })===undefined){
+                console.log("undefined se on kyllä");
+            }else{
+                {if(this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
+                    return skenario.id === scenario.id;
+                }).description!==scenario.description){
+                    let newScenarios = this.state.scenariosSelected.slice();
+                    newScenarios[i] = this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
+                        return skenario.id === scenario.id;
+                    })
+                    this.setState({ scenariosSelected : newScenarios }, () => {
+                        this.sendNewScenarios();
+                    })
+                }}
+            }})
+        }
+    }
+
     checkSelectionIsPartOfOptions(){
 
         //Checking if selected region is up to date with the selected region
@@ -78,7 +137,13 @@ class DropdownMenuScenarios extends React.Component {
 
         //Checking if selected scenariocollection is up to date with the selected region
 
-        if(this.state.regionSelected.scenarioCollections.includes(this.state.scenariocollectionSelected)){
+        var collectionIDs = [];
+
+        this.props.regionsDataFromParent.map((region) =>
+            region.scenarioCollections.map((collection) =>
+                collectionIDs.push(collection.id)));
+
+        if(collectionIDs.includes(this.state.scenariocollectionSelected.id)){
 
         }else{
             this.setState({ scenariocollectionSelected: this.state.regionSelected.scenarioCollections[0] }, ()=>{
@@ -90,40 +155,42 @@ class DropdownMenuScenarios extends React.Component {
 
         var optionsScenarioIDs = [];
 
-        this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
+        if(this.props.scenariosDataFromParent[0]!==undefined){
+            this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
             optionsScenarioIDs.push(scenarioi.id));
 
-        if(optionsScenarioIDs.includes(scenariosSelectedIDs[0])){
-
-        }else{
-            scenariosSelectedIDs = [this.props.scenariosDataFromParent[0].scenarios[0].id];
-            this.setState( { scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0]] }, ()=>{
-                this.sendNewScenarios();
-            } )        
+            if(!optionsScenarioIDs.includes(scenariosSelectedIDs[0])){
+                scenariosSelectedIDs = [this.props.scenariosDataFromParent[0].scenarios[0].id];
+                this.setState( { scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0]] }, ()=>{
+                    this.sendNewScenarios();
+                } )   
+            }
         }
 
         //Checking if period options are up to date with the selected scenario collection
 
         var optionsPeriodIDs = [];
 
-        this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
+        if(this.props.scenariosDataFromParent[0]!==undefined){
+            this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
             optionsPeriodIDs.push(periodi.id));
 
-        if(optionsPeriodIDs.includes(periodSelectedID)){
-
-        }else{
-            periodSelectedID = this.props.scenariosDataFromParent[0].timePeriods[0].id;
-            this.setState({ periodSelected: this.props.scenariosDataFromParent[0].timePeriods[0] }, ()=>{
-                this.sendNewScenarios();
-            })        
+            if(!optionsPeriodIDs.includes(periodSelectedID)){
+                periodSelectedID = this.props.scenariosDataFromParent[0].timePeriods[0].id;
+                this.setState({ periodSelected: this.props.scenariosDataFromParent[0].timePeriods[0] }, ()=>{
+                    this.sendNewScenarios();
+                })
+            }
         }
+
+        this.checkSelectionIsInCorrectLanguage();
     }
 
     render () {
         return (
             <div style={{textAlign:"left"}}>
-                <h1>Scenarios</h1>
-                <p>Regional level</p>
+                <h1>{this.props.language==='fi'?'Skenaariot':'Scenarios'}</h1>
+                <p>{this.props.language==='fi'?'Aluetaso':'Regional level'}</p>
                 <DropdownButton title={this.state.regionallevelSelected.name} id="1" onSelect={(evt)=>{
                     this.setState({regionallevelSelected: evt}, function() {
                         this.sendNewScenarios();
@@ -133,7 +200,7 @@ class DropdownMenuScenarios extends React.Component {
                 </DropdownButton>  
                 <p>  </p> 
 
-                <p>Region</p>
+                <p>{this.props.language==='fi'?'Alue':'Region'}</p>
                 <DropdownButton title={this.state.regionSelected.name} id="2" onSelect={(evt)=>{
                     this.setState({regionSelected: evt}, function() {
                         this.sendNewScenarios();
@@ -143,7 +210,7 @@ class DropdownMenuScenarios extends React.Component {
                 </DropdownButton>   
                 <p>  </p> 
 
-                <p>Scenario collection</p>
+                <p>{this.props.language==='fi'?'Skenaariokokoelma':'Scenario collection'}</p>
                 <DropdownButton title={this.state.scenariocollectionSelected.name} id="3" onSelect={(evt)=>{
                         this.setState({scenariocollectionSelected: evt}, () => {
                             this.sendNewScenarios();
@@ -153,16 +220,18 @@ class DropdownMenuScenarios extends React.Component {
                 </DropdownButton>  
                 <p>  </p> 
 
-                <p>Scenarios</p>
+                <p>{this.props.language==='fi'?'Skenaariot':'Scenarios'}</p>
                 <ButtonGroup vertical>
-                    {this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
+                    {this.props.scenariosDataFromParent[0]===undefined?'Error':
+                    this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
                         <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>)}
                 </ButtonGroup>
                 <p>  </p>
 
-                <p>Period</p>
+                <p>{this.props.language==='fi'?'Ajankohta':'Period'}</p>
                 <ButtonGroup vertical>
-                    {this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
+                    {this.props.scenariosDataFromParent[0]===undefined?'Error':
+                    this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
                         <Button color="default" key={i} onClick={() => this.onPeriodBtnClick(periodi.id, periodi)} active={periodSelectedID===periodi.id}>{periodi.yearStart+"-"+periodi.yearEnd}</Button>)}
                 </ButtonGroup>
 

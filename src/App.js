@@ -6,13 +6,12 @@ import ScenarioOptionsData from './data/ScenarioOptionsData'
 import Graphs from './components/Graphs';
 import DropdownMenuScenarios from './components/DropdownMenuScenarios';
 import Indicators from './components/Indicators';
+import LanguageSelector from './components/LanguageSelector';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        titleText: "Forest Indicator Service",
-    
         regionalLevelsData: [],
         regionsData: [],
         scenariosData: [],
@@ -23,20 +22,21 @@ class App extends Component {
         selectedScenarios: {},
         selectedPeriod: {},
         selectedIndicators: [],
+        selectedLanguage: 'fi',
 
         dataGotFromAPI: false
       };    
   }
 
   componentDidMount(){
-    ScenarioOptionsData.getAllRegionLevelData().then(result => {
+    ScenarioOptionsData.getAllRegionLevelData(this.state.selectedLanguage).then(result => {
       this.setState({ regionalLevelsData: result });
       this.setState({ selectedRegionallevel: result[0] }, () => {
-        ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id).then(regionresult => {
+        ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id, this.state.selectedLanguage).then(regionresult => {
           this.setState({ regionsData: regionresult });
           this.setState({ selectedRegion: regionresult[0] });
           this.setState({ selectedScenariocollection: regionresult[0].scenarioCollections[0] }, () => {
-            ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
+            ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id, this.state.selectedLanguage).then(scenarioResult => {
               this.setState({ scenariosData: scenarioResult });
               this.setState({ selectedScenariocollection: scenarioResult[0] }, () => {
                 this.setState({dataGotFromAPI: true});
@@ -49,9 +49,9 @@ class App extends Component {
   }
 
   updateScenarioOptions = () => {
-    ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id).then(regionresult => {
+    ScenarioOptionsData.getRegionData(this.state.selectedRegionallevel.id, this.state.selectedLanguage).then(regionresult => {
         this.setState({ regionsData: regionresult });
-        ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id).then(scenarioResult => {
+        ScenarioOptionsData.getScenarioCollectionData(this.state.selectedRegion.id, this.state.selectedScenariocollection.id, this.state.selectedLanguage).then(scenarioResult => {
           this.setState({ scenariosData: scenarioResult });
         });      
     })
@@ -71,10 +71,20 @@ class App extends Component {
     this.setState({selectedIndicators: gottenIndicators});
   }
 
+  getLanguageSelection = (language) => {
+    this.setState({ selectedLanguage:language }, ()=> {
+      ScenarioOptionsData.getAllRegionLevelData(this.state.selectedLanguage).then(result => {
+        this.setState({ regionalLevelsData: result });
+      })
+      this.updateScenarioOptions();
+    });
+  }
+
   render() {
     return (
       <div className="App">            
-        <h1 className="App-title">{this.state.titleText}</h1>
+        <h1 className="App-title">{this.state.selectedLanguage==='fi'?'Metsämittari':'Forest Indicator'}</h1>
+        <LanguageSelector sendLanguageToApp={this.getLanguageSelection}/>
         {this.state.dataGotFromAPI ? 
           <div className="container">
           <div className="row">          
@@ -83,6 +93,7 @@ class App extends Component {
                   <DropdownMenuScenarios  regionalLevelsDataFromParent={this.state.regionalLevelsData}
                                           regionsDataFromParent={this.state.regionsData}
                                           scenariosDataFromParent={this.state.scenariosData}
+                                          language={this.state.selectedLanguage}
                                           sendChoicesToApp={this.getChoicesFromScenarioMenu}/>
                 </div>
               </div>
@@ -91,6 +102,7 @@ class App extends Component {
                                                 scenarioobject = {this.state.selectedScenarios}/>
               </div>
               <div className="col-md-3"><Indicators scenariosDataFromParent={this.state.scenariosData}
+                                                    language={this.state.selectedLanguage}
                                                     sendIndicatorChoicesToApp={this.getChoicesFromIndicatorMenu}/></div>
           </div>
         </div> 
