@@ -51,7 +51,7 @@ function getRegionData(regionLevelId, language){
     function getScenarioCollectionData(regionId, scenarioCollectionId, language){
         
                 var url = "https://melatupa.azurewebsites.net/scenarioCollection/"+scenarioCollectionId+"/region/"+regionId;
-            
+
                 return new Promise((resolve, reject) => {
             
                     axios.get(url, {headers: {'Accept-Language': language}})
