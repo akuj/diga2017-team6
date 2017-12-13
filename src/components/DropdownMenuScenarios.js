@@ -23,7 +23,9 @@ class DropdownMenuScenarios extends React.Component {
             regionSelected: this.props.regionsDataFromParent[0],
             scenariocollectionSelected: this.props.regionsDataFromParent[0].scenarioCollections[0],
             scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0]],
-            periodSelected: this.props.scenariosDataFromParent[0].timePeriods[0]
+            periodSelected: this.props.scenariosDataFromParent[0].timePeriods[0],
+            regionallevelmenuopen: false,
+            scenariomenuopen: false
         };
     }
 
@@ -191,16 +193,20 @@ class DropdownMenuScenarios extends React.Component {
             <div style={{textAlign:"left"}}>
                 <h1>{this.props.language==='fi'?'Skenaariot':'Scenarios'}</h1>
                 <p>{this.props.language==='fi'?'Aluetaso':'Regional level'}</p>
-                <DropdownButton title={this.state.regionallevelSelected.name} id="1" onSelect={(evt)=>{
-                    this.setState({regionallevelSelected: evt}, function() {
-                        this.sendNewScenarios();
-                    });}}>
+                <DropdownButton title={this.state.regionallevelSelected.name} 
+                    open={this.state.regionallevelmenuopen} id="1" 
+                    onClick={() => this.setState({regionallevelmenuopen:true})}>
                     {this.props.regionalLevelsDataFromParent.map((regionalleveli, i) =>  
-                        <OverlayTrigger placement="right" overlay={
+                        <OverlayTrigger placement="right" key={i} overlay={
                             <Tooltip id="tooltip">{regionalleveli.description}</Tooltip>}>
-                                <MenuItem eventKey={regionalleveli} key={i}>{regionalleveli.name}</MenuItem>
+                                <MenuItem eventKey={regionalleveli} key={i} onSelect={(evt)=>{
+                                    this.setState({regionallevelmenuopen:false});
+                                    this.setState({regionallevelSelected: evt}, function() {
+                                        this.sendNewScenarios();
+                                    });
+                                }}>{regionalleveli.name}</MenuItem>
                         </OverlayTrigger>                     
-                        )}                       
+                    )}                       
                 </DropdownButton>  
                 <p>  </p> 
 
@@ -215,14 +221,19 @@ class DropdownMenuScenarios extends React.Component {
                 <p>  </p> 
 
                 <p>{this.props.language==='fi'?'Skenaariokokoelma':'Scenario collection'}</p>
-                <DropdownButton title={this.state.scenariocollectionSelected.name} id="3" onSelect={(evt)=>{
-                        this.setState({scenariocollectionSelected: evt}, () => {
-                            this.sendNewScenarios();
-                        })}}>
+                <DropdownButton title={this.state.scenariocollectionSelected.name} 
+                    open={this.state.scenariomenuopen} id="3" 
+                    onClick={() => this.setState({scenariomenuopen:true})}>
                         {this.state.regionSelected.scenarioCollections.map((scenariocollectioni, i) =>
-                        <OverlayTrigger placement="right" overlay={
+                        <OverlayTrigger placement="right" key={i} overlay={
                             <Tooltip id="tooltip">{scenariocollectioni.description}</Tooltip>}>
-                                <MenuItem eventKey={scenariocollectioni} key={i}>{scenariocollectioni.name}</MenuItem>
+                                <MenuItem eventKey={scenariocollectioni} key={i}
+                                onSelect={(evt)=>{
+                                    this.setState({scenariomenuopen:false});
+                                    this.setState({scenariocollectionSelected: evt}, function() {
+                                        this.sendNewScenarios();
+                                    });
+                                }}>{scenariocollectioni.name}</MenuItem>
                         </OverlayTrigger>)}
                 </DropdownButton>  
                 <p>  </p> 
@@ -231,7 +242,7 @@ class DropdownMenuScenarios extends React.Component {
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0]===undefined?'Error':
                     this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
-                    <OverlayTrigger placement="right" overlay={
+                    <OverlayTrigger placement="right" key={i} overlay={
                         <Tooltip id="tooltip">{scenarioi.description}</Tooltip>}>
                             <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>
                     </OverlayTrigger>)}
