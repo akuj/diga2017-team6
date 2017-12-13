@@ -1,6 +1,6 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {DropdownButton, MenuItem, ButtonGroup, Button} from 'react-bootstrap';
+import {DropdownButton, MenuItem, ButtonGroup, Button, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 var scenariosSelectedIDs = [];
 var periodSelectedID = "";
@@ -195,8 +195,12 @@ class DropdownMenuScenarios extends React.Component {
                     this.setState({regionallevelSelected: evt}, function() {
                         this.sendNewScenarios();
                     });}}>
-                    {this.props.regionalLevelsDataFromParent.map((regionalleveli, i) =>                       
-                        <MenuItem eventKey={regionalleveli} key={i}>{regionalleveli.name}</MenuItem>)}                       
+                    {this.props.regionalLevelsDataFromParent.map((regionalleveli, i) =>  
+                        <OverlayTrigger placement="right" overlay={
+                            <Tooltip id="tooltip">{regionalleveli.description}</Tooltip>}>
+                                <MenuItem eventKey={regionalleveli} key={i}>{regionalleveli.name}</MenuItem>
+                        </OverlayTrigger>                     
+                        )}                       
                 </DropdownButton>  
                 <p>  </p> 
 
@@ -216,7 +220,10 @@ class DropdownMenuScenarios extends React.Component {
                             this.sendNewScenarios();
                         })}}>
                         {this.state.regionSelected.scenarioCollections.map((scenariocollectioni, i) =>
-                        <MenuItem eventKey={scenariocollectioni} key={i}>{scenariocollectioni.name}</MenuItem>)}
+                        <OverlayTrigger placement="right" overlay={
+                            <Tooltip id="tooltip">{scenariocollectioni.description}</Tooltip>}>
+                                <MenuItem eventKey={scenariocollectioni} key={i}>{scenariocollectioni.name}</MenuItem>
+                        </OverlayTrigger>)}
                 </DropdownButton>  
                 <p>  </p> 
 
@@ -224,7 +231,10 @@ class DropdownMenuScenarios extends React.Component {
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0]===undefined?'Error':
                     this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>)}
+                    <OverlayTrigger placement="right" overlay={
+                        <Tooltip id="tooltip">{scenarioi.description}</Tooltip>}>
+                            <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>
+                    </OverlayTrigger>)}
                 </ButtonGroup>
                 <p>  </p>
 
