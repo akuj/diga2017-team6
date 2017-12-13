@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {ButtonGroup, Button} from 'react-bootstrap';
+import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 var firstOptionActivated = false;
 var indicatorsSelectedIDs = [];
@@ -109,23 +109,29 @@ class Indicators extends React.Component {
                         <div><p>{indicatorCategory.name}*</p>
                         <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
-                                <Button color="default" key={indicator.id} 
-                                onClick={() => this.onCheckboxBtnClick(indicator)}
-                                active={indicatorsSelectedIDs.includes(indicator.id)}>
-                                    {indicator.name}     
-                                {this.activateFirstOptionInMandatoryCategory(indicator)}                     
-                                </Button>
+                                <OverlayTrigger placement="left" overlay={
+                                    <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
+                                        <Button color="default" key={indicator.id} 
+                                            onClick={() => this.onCheckboxBtnClick(indicator)}
+                                            active={indicatorsSelectedIDs.includes(indicator.id)}>
+                                                {indicator.name}     
+                                            {this.activateFirstOptionInMandatoryCategory(indicator)}                     
+                                        </Button>
+                                </OverlayTrigger>
                             )}
                         </ButtonGroup></div>
                         :
                         <div><p>{indicatorCategory.name}</p>
                         <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
-                                <Button color="default" key={indicator.id} 
-                                onClick={() => this.onCheckboxBtnClick(indicator)}
-                                active={indicatorsSelectedIDs.includes(indicator.id)}>
-                                    {indicator.name} 
-                                </Button>
+                                <OverlayTrigger placement="left" overlay={
+                                    <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
+                                        <Button color="default" key={indicator.id} 
+                                            onClick={() => this.onCheckboxBtnClick(indicator)}
+                                            active={indicatorsSelectedIDs.includes(indicator.id)}>
+                                                {indicator.name} 
+                                        </Button>
+                                </OverlayTrigger>
                             )}
                         </ButtonGroup></div>
                         }
