@@ -2,9 +2,6 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 
-var firstOptionActivated = false;
-var indicatorsSelectedIDs = [];
-
 class Indicators extends React.Component {
 
     constructor (props) {
@@ -20,18 +17,27 @@ class Indicators extends React.Component {
     }
 
     onCheckboxBtnClick(selected) {
-        const index = indicatorsSelectedIDs.indexOf(selected.id);
+        const index = this.state.indicatorsSelected.map((indikator)=>
+            indikator.id).indexOf(selected.id);
+
+        function compare(a,b) {
+            if (a.order < b.order)
+              return -1;
+            if (a.order > b.order)
+              return 1;
+            return 0;
+        }
 
         if (index < 0) {
             this.state.indicatorsSelected.push(selected);
-            indicatorsSelectedIDs.push(selected.id);
+            this.state.indicatorsSelected.sort(compare);
         }
         else if(this.state.indicatorsSelected.length>1) {
             this.state.indicatorsSelected.splice(index, 1);
-            indicatorsSelectedIDs.splice(index, 1);
         }
-        this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] });
-        this.sendNewIndicators();
+        this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] }, ()=>{
+            this.sendNewIndicators();
+        });
     }
 
     sendNewIndicators(){
@@ -47,7 +53,8 @@ class Indicators extends React.Component {
             indicatorCategory.indicators.map((indicator, a)=>
                 optionIDs.push(indicator.id)));
     
-            indicatorsSelectedIDs.map((selectedIndicatorID, i) =>
+                this.state.indicatorsSelected.map((indikator)=>
+                indikator.id).map((selectedIndicatorID, i) =>
                 {if(optionIDs.includes(selectedIndicatorID)){
                     atLeastOneIsSelected=true;
                 }else{
@@ -60,16 +67,6 @@ class Indicators extends React.Component {
         }
 
         this.changeLanguageOfSelections();
-    }
-
-    activateFirstOptionInMandatoryCategory(selected){
-        if(!firstOptionActivated){
-            firstOptionActivated=true;
-            this.state.indicatorsSelected.push(selected);
-            indicatorsSelectedIDs.push(selected.id);
-            this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] });
-            this.sendNewIndicators();
-        }
     }
 
     changeLanguageOfSelections(){
@@ -98,18 +95,6 @@ class Indicators extends React.Component {
         }
     }
 
-    /*orderIndicatorsByOrderValue(){
-        function compare(a,b) {
-            if (a.order < b.order)
-              return -1;
-            if (a.order > b.order)
-              return 1;
-            return 0;
-          }
-          
-          this.state.sort(compare);
-    }*/
-
     render () {
         return (
             <div>
@@ -125,9 +110,9 @@ class Indicators extends React.Component {
                                     <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
                                         <Button color="default" key={indicator.id} 
                                             onClick={() => this.onCheckboxBtnClick(indicator)}
-                                            active={indicatorsSelectedIDs.includes(indicator.id)}>
-                                                {indicator.name}     
-                                            {this.activateFirstOptionInMandatoryCategory(indicator)}                     
+                                            active={this.state.indicatorsSelected.map((indikator)=>
+                                                indikator.id).includes(indicator.id)}>
+                                                {indicator.name}                        
                                         </Button>
                                 </OverlayTrigger>
                             )}
@@ -140,7 +125,8 @@ class Indicators extends React.Component {
                                     <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
                                         <Button color="default" key={indicator.id} 
                                             onClick={() => this.onCheckboxBtnClick(indicator)}
-                                            active={indicatorsSelectedIDs.includes(indicator.id)}>
+                                            active={this.state.indicatorsSelected.map((indikator)=>
+                                                indikator.id).includes(indicator.id)}>
                                                 {indicator.name} 
                                         </Button>
                                 </OverlayTrigger>

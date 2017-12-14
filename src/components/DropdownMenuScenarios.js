@@ -2,7 +2,6 @@ import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {DropdownButton, MenuItem, ButtonGroup, Button, Tooltip, OverlayTrigger} from 'react-bootstrap';
 
-var scenariosSelectedIDs = [];
 var periodSelectedID = "";
 
 class DropdownMenuScenarios extends React.Component {
@@ -15,8 +14,7 @@ class DropdownMenuScenarios extends React.Component {
         this.checkSelectionIsPartOfOptions = this.checkSelectionIsPartOfOptions.bind(this);
         this.checkSelectionIsInCorrectLanguage = this.checkSelectionIsInCorrectLanguage.bind(this);
 
-        scenariosSelectedIDs = [this.props.scenariosDataFromParent[0].scenarios[0].id];
-        periodSelectedID = this.props.scenariosDataFromParent[0].timePeriods[0].id;
+        periodSelectedID = [this.props.scenariosDataFromParent[0].timePeriods[0].id];
     
         this.state = {
             regionallevelSelected: this.props.regionalLevelsDataFromParent[0],
@@ -33,17 +31,27 @@ class DropdownMenuScenarios extends React.Component {
         this.sendNewScenarios();
     }
 
-    onScenarioBtnClick(selectedID, selected) {
-        const index = scenariosSelectedIDs.indexOf(selectedID);
-        if (index < 0) {
-          scenariosSelectedIDs.push(selectedID);
-          this.state.scenariosSelected.push(selected);
-        } else if(scenariosSelectedIDs.length>1){
-          scenariosSelectedIDs.splice(index, 1);
-          this.state.scenariosSelected.splice(index, 1);
+    onScenarioBtnClick(selected) {
+
+        const index = this.state.scenariosSelected.map((skenario)=>
+            skenario.id).indexOf(selected.id);
+
+        function compare(a,b) {
+            if (a.order < b.order)
+              return -1;
+            if (a.order > b.order)
+              return 1;
+            return 0;
         }
-        this.setState({ scenariosSelectedNames: [...this.state.scenariosSelected] }, ()=> {
-            this.sendNewScenarios();
+
+        if (index < 0) {
+            this.state.scenariosSelected.push(selected);
+            this.state.scenariosSelected.sort(compare);
+        } else if(this.state.scenariosSelected.length>1){
+            this.state.scenariosSelected.splice(index, 1);
+        }
+            this.setState({ scenariosSelected: [...this.state.scenariosSelected] }, ()=> {
+                this.sendNewScenarios();
         });
     }
 
@@ -161,8 +169,8 @@ class DropdownMenuScenarios extends React.Component {
             this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
             optionsScenarioIDs.push(scenarioi.id));
 
-            if(!optionsScenarioIDs.includes(scenariosSelectedIDs[0])){
-                scenariosSelectedIDs = [this.props.scenariosDataFromParent[0].scenarios[0].id];
+            if(!optionsScenarioIDs.includes(this.state.scenariosSelected.map((skenario)=>
+                skenario.id)[0])){
                 this.setState( { scenariosSelected: [this.props.scenariosDataFromParent[0].scenarios[0]] }, ()=>{
                     this.sendNewScenarios();
                 } )   
@@ -244,7 +252,8 @@ class DropdownMenuScenarios extends React.Component {
                     this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
                     <OverlayTrigger placement="right" key={i} overlay={
                         <Tooltip id="tooltip">{scenarioi.description}</Tooltip>}>
-                            <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi.id, scenarioi)} active={scenariosSelectedIDs.includes(scenarioi.id)}>{scenarioi.name}</Button>
+                            <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi)} active={this.state.scenariosSelected.map((skenario)=>
+                            skenario.id).includes(scenarioi.id)}>{scenarioi.name}</Button>
                     </OverlayTrigger>)}
                 </ButtonGroup>
                 <p>  </p>
