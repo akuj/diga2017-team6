@@ -36,6 +36,11 @@ class Graphs extends Component {
                     type: this.state.rSelected,
                     
                     polar: this.state.polar1,
+                    background: 'black',
+                    style: {
+                        color: 'white',
+                        
+                    }
             },
             title: {
                 text: 'Monthly Average Rainfall'
@@ -112,15 +117,15 @@ class Graphs extends Component {
     };
 
     return (
-      <div>
+      <div className="Graph">
         <h1>
           <ReactHighcharts config = {config}></ReactHighcharts>
         </h1>
 
         <ButtonGroup>
-          <Button color="default" onClick={() => this.onRadioBtnClick('column')} active={this.state.rSelected.includes ('column')}>column</Button>
-          <Button color="default" onClick={() => this.onRadioBtnClick('polar')} active={this.state.rSelected.includes ('polar')}>polar</Button>
-          <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>pie</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('column')} active={this.state.rSelected.includes ('column')}>Column</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('polar')} active={this.state.rSelected.includes ('polar')}>Polar</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>Pie</Button>
         </ButtonGroup>
         <p>Selected: {this.state.rSelected}</p>
       </div>)

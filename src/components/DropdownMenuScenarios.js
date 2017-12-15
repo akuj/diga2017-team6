@@ -56,7 +56,7 @@ class DropdownMenuScenarios extends React.Component {
                 <h1>Scenarios</h1>
 
                 <p id="Options">Regional level</p>
-                <DropdownButton title={this.state.regionallevel} onSelect={(evt)=>{
+                <DropdownButton className="button" title={this.state.regionallevel} onSelect={(evt)=>{
                     this.setState({regionallevel: evt}, () => {
                         this.sendNewScenarios();
                     })}}>
@@ -66,7 +66,7 @@ class DropdownMenuScenarios extends React.Component {
                 
 
                 <p id="Options">Region</p>
-                <DropdownButton title={this.state.region} onSelect={(evt)=>{
+                <DropdownButton className="button" title={this.state.region} onSelect={(evt)=>{
                     this.setState({region: evt}, () => {
                         this.sendNewScenarios();
                     })}}>
@@ -76,7 +76,7 @@ class DropdownMenuScenarios extends React.Component {
                 
 
                 <p id="Options">Scenario collection</p>
-                <DropdownButton title={this.state.scenariocollection} onSelect={(evt)=>{
+                <DropdownButton className="button" title={this.state.scenariocollection} onSelect={(evt)=>{
                         this.setState({scenariocollection: evt}, () => {
                             this.sendNewScenarios();
                         })}}>
@@ -88,15 +88,15 @@ class DropdownMenuScenarios extends React.Component {
                 <p id="Options">Scenarios</p>
                 <ButtonGroup vertical>
                     {scenarios.map((scenarioi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onCheckboxBtnClick(scenarioi)} active={this.state.checkboxesSelected.includes(scenarioi)}>{scenarioi}</Button>)}
+                        <Button className="button"  color="default" key={i} onClick={() => this.onCheckboxBtnClick(scenarioi)} active={this.state.checkboxesSelected.includes(scenarioi)}>{scenarioi}</Button>)}
                 </ButtonGroup>
                 {/*<p>Selected: {JSON.stringify(this.state.checkboxesSelected)}</p>*/}
                 
 
                 <p id="Options">Period</p>
-                <ButtonGroup vertical>
+                <ButtonGroup className="button" vertical>
                     {periods.map((periodi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onRadioBtnClick(periodi)} active={this.state.radioButtonSelected===periodi}>{periodi}</Button>)}
+                        <Button className="button" color="default" key={i} onClick={() => this.onRadioBtnClick(periodi)} active={this.state.radioButtonSelected===periodi}>{periodi}</Button>)}
                 </ButtonGroup>
                 {/*<p>Selected: {JSON.stringify(this.state.radioButtonSelected)}</p>*/}  
             </div>

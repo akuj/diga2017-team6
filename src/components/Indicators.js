@@ -66,7 +66,7 @@ class Indicators extends React.Component {
                 <p id="Options">Wood Production</p>
                 <ButtonGroup vertical>
                     {woodProduction.map((indicator1, i) =>
-                        <Button
+                        <Button className="button"
                         color="default"
                         key={i}
                         onClick={() => this.onCheckboxBtnClick(indicator1)}
@@ -79,7 +79,7 @@ class Indicators extends React.Component {
                 <p id="Options">Biodiversity</p>
                 <ButtonGroup vertical>
                     {biodiversity.map((indicator2, i) =>
-                    <Button
+                    <Button className="button"
                     color="default"
                     key={i}
                     onClick={() => this.onCheckboxBtnClick(indicator2)}
@@ -92,7 +92,7 @@ class Indicators extends React.Component {
                 <p id="Options">Natural/Non-wood Production</p>
                 <ButtonGroup vertical>
                     {natural_nonwood_forestPrducts.map((indicator3, i) =>
-                    <Button
+                    <Button className="button"
                     color="default"
                     key={i}
                     onClick={() => this.onCheckboxBtnClick(indicator3)}
@@ -105,7 +105,7 @@ class Indicators extends React.Component {
                 <p id="Options">Carbon</p>
                 <ButtonGroup vertical>
                     {carbon.map((indicator4, i) =>
-                    <Button
+                    <Button className="button"
                     color="default"
                     key={i}
                     onClick={() => this.onCheckboxBtnClick(indicator4)}>
@@ -117,7 +117,7 @@ class Indicators extends React.Component {
                 <p id="Options">Others</p>
                 <ButtonGroup vertical>
                     {others.map((indicator5, i) =>
-                    <Button
+                    <Button className="button"
                     color="default"
                     key={i}
                     onClick={() => this.onCheckboxBtnClick(indicator5)}>
