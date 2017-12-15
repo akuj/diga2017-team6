@@ -127,7 +127,9 @@ class Graphs extends Component {
         var config = {
         
             chart: {
+
                     type: 'column',
+
             },
             title: {
                 text: title
@@ -220,7 +222,7 @@ class Graphs extends Component {
     }
 
     return (
-      <div>
+      <div className="Graph">
           <p></p>
           <p></p>
           {this.state.rSelected==='table'

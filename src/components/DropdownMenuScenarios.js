@@ -200,8 +200,8 @@ class DropdownMenuScenarios extends React.Component {
         return (
             <div style={{textAlign:"left"}}>
                 <h1>{this.props.language==='fi'?'Skenaariot':'Scenarios'}</h1>
-                <p>{this.props.language==='fi'?'Aluetaso':'Regional level'}</p>
-                <DropdownButton title={this.state.regionallevelSelected.name} 
+                <p id="Options">{this.props.language==='fi'?'Aluetaso':'Regional level'}</p>
+                <DropdownButton className="button" title={this.state.regionallevelSelected.name} 
                     open={this.state.regionallevelmenuopen} id="1" 
                     onClick={() => this.setState({regionallevelmenuopen:true})}>
                     {this.props.regionalLevelsDataFromParent.map((regionalleveli, i) =>  
@@ -216,10 +216,10 @@ class DropdownMenuScenarios extends React.Component {
                         </OverlayTrigger>                     
                     )}                       
                 </DropdownButton>  
-                <p>  </p> 
+                
 
-                <p>{this.props.language==='fi'?'Alue':'Region'}</p>
-                <DropdownButton title={this.state.regionSelected.name} id="2" onSelect={(evt)=>{
+                <p id="Options">{this.props.language==='fi'?'Alue':'Region'}</p>
+                <DropdownButton className="button" title={this.state.regionSelected.name} id="2" onSelect={(evt)=>{
                     this.setState({regionSelected: evt}, function() {
                         this.sendNewScenarios();
                     });}}>
@@ -228,8 +228,8 @@ class DropdownMenuScenarios extends React.Component {
                 </DropdownButton>   
                 <p>  </p> 
 
-                <p>{this.props.language==='fi'?'Skenaariokokoelma':'Scenario collection'}</p>
-                <DropdownButton title={this.state.scenariocollectionSelected.name} 
+                <p id="Options">{this.props.language==='fi'?'Skenaariokokoelma':'Scenario collection'}</p>
+                <DropdownButton className="button" title={this.state.scenariocollectionSelected.name} 
                     open={this.state.scenariomenuopen} id="3" 
                     onClick={() => this.setState({scenariomenuopen:true})}>
                         {this.state.regionSelected.scenarioCollections.map((scenariocollectioni, i) =>
@@ -244,25 +244,24 @@ class DropdownMenuScenarios extends React.Component {
                                 }}>{scenariocollectioni.name}</MenuItem>
                         </OverlayTrigger>)}
                 </DropdownButton>  
-                <p>  </p> 
-
-                <p>{this.props.language==='fi'?'Skenaariot':'Scenarios'}</p>
+                
+                <p id="Options">{this.props.language==='fi'?'Skenaariot':'Scenarios'}</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0]===undefined?'Error':
                     this.props.scenariosDataFromParent[0].scenarios.map((scenarioi, i) =>
                     <OverlayTrigger placement="right" key={i} overlay={
                         <Tooltip id="tooltip">{scenarioi.description}</Tooltip>}>
-                            <Button color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi)} active={this.state.scenariosSelected.map((skenario)=>
+                            <Button className="button" color="default" key={i} onClick={() => this.onScenarioBtnClick(scenarioi)} active={this.state.scenariosSelected.map((skenario)=>
                             skenario.id).includes(scenarioi.id)}>{scenarioi.name}</Button>
                     </OverlayTrigger>)}
                 </ButtonGroup>
                 <p>  </p>
 
-                <p>{this.props.language==='fi'?'Ajankohta':'Period'}</p>
+                <p id="Options">{this.props.language==='fi'?'Ajankohta':'Period'}</p>
                 <ButtonGroup vertical>
                     {this.props.scenariosDataFromParent[0]===undefined?'Error':
                     this.props.scenariosDataFromParent[0].timePeriods.map((periodi, i) =>
-                        <Button color="default" key={i} onClick={() => this.onPeriodBtnClick(periodi.id, periodi)} active={periodSelectedID===periodi.id}>{periodi.yearStart+"-"+periodi.yearEnd}</Button>)}
+                        <Button className="button" color="default" key={i} onClick={() => this.onPeriodBtnClick(periodi.id, periodi)} active={periodSelectedID===periodi.id}>{periodi.yearStart+"-"+periodi.yearEnd}</Button>)}
                 </ButtonGroup>
 
                 {this.checkSelectionIsPartOfOptions()} 

@@ -1,6 +1,9 @@
 .App {
-  text-align: center;
-  background: linear-gradient(to bottom right, #2b8859, #c4edd9 );
+  text-align: center;  
+  font-family: "Palatino Linotype", Palatino, serif;
+  background-image: url('./pics/Background.jpg');
+  background-size: 103%;
+  background-attachment: scroll;
 }
 
 .App-logo {
@@ -16,17 +19,69 @@
 }
 
 .App-title {
-  font: 50px bold georgia;
+  font: 60px bold;
+  color: #0b2c5b;
+  text-shadow:  0 1px 0 #b3b3b3,
+                0 2px 0 #a6a6a6,
+                0 3px 0 #999999,
+                0 4px 0 #8c8c8c,
+                0 5px 0 #808080,
+                0 6px 1px rgba(0,0,0,.1),
+                0 0 5px rgba(0,0,0,.1),
+                0 1px 3px rgba(0,0,0,.3),
+                0 3px 5px rgba(0,0,0,.2),
+                0 5px 10px rgba(0,0,0,.25),
+                0 10px 10px rgba(0,0,0,.2),
+                0 20px 20px rgba(0,0,0,.15);
+  text-transform: uppercase;
+  padding-top: 10px;
+}
+
+h1 {
+  text-shadow: 0 -2px 3px #cccccc;
+}
+
+#Options {
+  text-transform: uppercase;
+  padding-top: 20px;
+  font-size: medium;
+}
+
+.ScenarioMenu {  
+  padding-bottom: 20px;
+  padding-left: 15px;
+  padding-right: 0px;
+  background: linear-gradient(to bottom right, #5d7495, #e2e2e2 );
+  border: 4px ridge #e7e7e7;
+  border-radius: 7px;
+  margin-top: 20px;
+  box-shadow: 2px 2px 5px 3px rgba(0, 0, 0, 0.60);
+}
+
+.IndicatorMenu {
+  padding-right: 15px;
+  padding-bottom: 20px;
+  background: linear-gradient(to bottom left, #5d7495, #e2e2e2 );
+  border: 4px groove #e7e7e7;
+  border-radius: 7px;
+  margin-top: 20px;
+  text-align: right;
+  box-shadow: 2px 2px 5px 3px rgba(0, 0, 0, 0.60);
+}
+
+.Graph {
   color: white;
+  background-color: #071a35;
+  font-family: "Palatino Linotype", Palatino, serif;
 }
 
-.App-intro {
-  font-size: large georgia;
-}
 
-.ScenarioMenu {
-  padding-left: 20px;
-  
+.button {
+  -webkit-transition-property: all;
+          transition-property: all;
+  -webkit-transition-duration: .3s;
+          transition-duration: .3s;
+  box-shadow: 0 0 14px 0 rgba(9, 103, 245, 0.90);  
 }
 
 @keyframes App-logo-spin {

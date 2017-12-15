@@ -103,12 +103,12 @@ class Indicators extends React.Component {
                     <div>
                         {
                         indicatorCategory.isMandatory===1 ? 
-                        <div><p>{indicatorCategory.name}*</p>
+                        <div><p id="Options">{indicatorCategory.name}*</p>
                         <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
                                 <OverlayTrigger placement="left" overlay={
                                     <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
-                                        <Button color="default" key={indicator.id} 
+                                        <Button className="button" color="default" key={indicator.id} 
                                             onClick={() => this.onCheckboxBtnClick(indicator)}
                                             active={this.state.indicatorsSelected.map((indikator)=>
                                                 indikator.id).includes(indicator.id)}>
@@ -118,12 +118,12 @@ class Indicators extends React.Component {
                             )}
                         </ButtonGroup></div>
                         :
-                        <div><p>{indicatorCategory.name}</p>
+                        <div><p id="Options">{indicatorCategory.name}</p>
                         <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
                                 <OverlayTrigger placement="left" overlay={
                                     <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
-                                        <Button color="default" key={indicator.id} 
+                                        <Button className="button" color="default" key={indicator.id} 
                                             onClick={() => this.onCheckboxBtnClick(indicator)}
                                             active={this.state.indicatorsSelected.map((indikator)=>
                                                 indikator.id).includes(indicator.id)}>
