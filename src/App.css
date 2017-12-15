@@ -1,9 +1,9 @@
 .App {
   text-align: center;
   background: linear-gradient(to top, #5d7495, #e2e2e2 );
-  font-family: serif;
+  font-family: "Palatino Linotype", Palatino, serif;
   background-image: url('./pics/background_copy.jpg');
-  background-size: 87%;
+  background-size: 100%;
   background-attachment: scroll;
 }
 
@@ -35,31 +35,64 @@
                 0 10px 10px rgba(0,0,0,.2),
                 0 20px 20px rgba(0,0,0,.15);
   text-transform: uppercase;
+  padding-top: 10px;
 }
 
-.App-intro {
-  font-size: large;
+h1 {
+  text-shadow: 0 1px 3px #cccccc;
+}
+
+#Options {
+  text-transform: uppercase;
+  padding-top: 20px;
+  font-size: medium;
 }
 
 .ScenarioMenu {  
   padding-bottom: 20px;
   padding-left: 15px;
   padding-right: 0px;
-  background-color: #939fb1;
-  border: 5px outset #e7e7e7;
-  border-radius: 7px;  
+  background: linear-gradient(to bottom right, #5d7495, #e2e2e2 );
+  border: 4px ridge #e7e7e7;
+  border-radius: 7px;
   margin-top: 20px;
+  box-shadow: 2px 2px 5px 3px rgba(0, 0, 0, 0.60);
 }
 
 .IndicatorMenu {
   padding-right: 15px;
   padding-bottom: 20px;
-  background-color: #647a9a;
-  border: 5px inset #e7e7e7;
+  background: linear-gradient(to bottom left, #5d7495, #e2e2e2 );
+  border: 4px groove #e7e7e7;
   border-radius: 7px;
   margin-top: 20px;
   text-align: right;
+  box-shadow: 2px 2px 5px 3px rgba(0, 0, 0, 0.60);
 }
+
+.button {
+  color: black;
+  background-color: grey;
+  border-color: grey;
+  font-weight: 300;
+  font-size: 16px;
+  font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  text-decoration: none;
+  text-align: center;
+  line-height: 40px;
+  height: 40px;
+  padding: 0 40px;
+  margin: 0;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transition-property: all;
+          transition-property: all;
+  -webkit-transition-duration: .3s;
+          transition-duration: .3s; }
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

@@ -63,7 +63,7 @@ class Indicators extends React.Component {
         return (
             <div>
                 <h1>Categories</h1>
-                <p>Wood Production</p>
+                <p id="Options">Wood Production</p>
                 <ButtonGroup vertical>
                     {woodProduction.map((indicator1, i) =>
                         <Button
@@ -76,7 +76,7 @@ class Indicators extends React.Component {
                     )}
                 </ButtonGroup>
                 
-                <p>Biodiversity</p>
+                <p id="Options">Biodiversity</p>
                 <ButtonGroup vertical>
                     {biodiversity.map((indicator2, i) =>
                     <Button
@@ -89,7 +89,7 @@ class Indicators extends React.Component {
                     )}
                 </ButtonGroup>
                 
-                <p>Natural/Non-wood Production</p>
+                <p id="Options">Natural/Non-wood Production</p>
                 <ButtonGroup vertical>
                     {natural_nonwood_forestPrducts.map((indicator3, i) =>
                     <Button
@@ -102,7 +102,7 @@ class Indicators extends React.Component {
                     )}
                 </ButtonGroup>
 
-                <p>Carbon</p>
+                <p id="Options">Carbon</p>
                 <ButtonGroup vertical>
                     {carbon.map((indicator4, i) =>
                     <Button
@@ -114,7 +114,7 @@ class Indicators extends React.Component {
                     )}
                 </ButtonGroup>
 
-                <p>Others</p>
+                <p id="Options">Others</p>
                 <ButtonGroup vertical>
                     {others.map((indicator5, i) =>
                     <Button
