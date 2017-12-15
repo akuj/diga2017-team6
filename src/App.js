@@ -104,9 +104,11 @@ class App extends Component {
                                                 language={this.state.selectedLanguage}
                                                 indicatorobject = {this.state.selectedIndicators}/>
               </div>
-              <div className="col-md-3"><Indicators scenariosDataFromParent={this.state.scenariosData}
+              <div className="col-md-3">
+              <div className="IndicatorMenu"><Indicators scenariosDataFromParent={this.state.scenariosData}
                                                     language={this.state.selectedLanguage}
                                                     sendIndicatorChoicesToApp={this.getChoicesFromIndicatorMenu}/></div>
+              </div>
           </div>
         </div> 
           : <p>Loading...</p>}
