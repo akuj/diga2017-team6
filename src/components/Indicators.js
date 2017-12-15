@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {DropdownButton, MenuItem, ButtonGroup, Button} from 'react-bootstrap';
+import {DropdownButton, MenuItem, ButtonGroup, Button, ToggleButtonGroup, ToggleButton} from 'react-bootstrap';
 
 
 const woodProduction = [
