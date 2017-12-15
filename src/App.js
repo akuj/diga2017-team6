@@ -101,6 +101,7 @@ class App extends Component {
                                                 periodobject = {this.state.selectedPeriod} 
                                                 scenarioobject = {this.state.selectedScenarios}
                                                 scenariosDataFromParent={this.state.scenariosData}
+                                                language={this.state.selectedLanguage}
                                                 indicatorobject = {this.state.selectedIndicators}/>
               </div>
               <div className="col-md-3"><Indicators scenariosDataFromParent={this.state.scenariosData}
