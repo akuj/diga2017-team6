@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import {Bootstrap, ToggleButton, MenuItem, ToggleButtonGroup, ButtonToolbar} from 'react-bootstrap';
 import { Button, ButtonGroup } from 'reactstrap';
-const ReactHighcharts = require('react-highcharts');
+const ReactHighcharts = require('react-highcharts')
+var HighchartsMore = require('highcharts-more');
+HighchartsMore(ReactHighcharts.Highcharts);
+var HighchartsExporting = require('highcharts-exporting');
+HighchartsExporting(ReactHighcharts.Highcharts);
 
 class Graphs extends Component {
 
@@ -27,49 +30,122 @@ class Graphs extends Component {
       }
 
   render () {
+    var data = this.props.scenariosDataFromParent[0].values;
+
+    var scenarios = this.props.scenarioobject;
+    var indicators = this.props.indicatorobject;
+    var timeperiod = this.props.periodobject;
+
+    if(this.props.scenarioobject===null){
+        scenarios = [this.props.scenariosDataFromParent[0].scenarios[0]]
+    }
+
+    if(this.props.indicatorobject===null){
+        indicators = [this.props.scenariosDataFromParent[0].indicatorCategories[0].indicators[0]]
+    }
+
+    if(this.props.periodobject===null){
+        timeperiod = this.props.scenariosDataFromParent[0].timePeriods[0]
+    }
+
+    var dataFilteredByTimeperiod = [];
+    data.map((value, i)=>
+        {if(value.timePeriodId===timeperiod.id){
+            dataFilteredByTimeperiod.push(value);
+        }}
+    )
 
 
-      var config = {
+    var dataFilteredByIndicators = [];
+    dataFilteredByTimeperiod.map((value)=>
+        indicators.map((indicator)=>
+            {if(value.indicatorId===indicator.id){
+                dataFilteredByIndicators.push(value);
+            }}
+        )
+    )
+
+    var dataFilteredByAllSelections = [];
+    dataFilteredByIndicators.map((value, i)=>
+        scenarios.map((scenario)=>
+            {if(value.scenarioId===scenario.id){
+                dataFilteredByAllSelections.push(value);
+            }}
+        )
+    )
+
+
+    function compare(a,b) {
+        if(a.indicatorId < b.indicatorId)
+            return -1;
+        if(a.indicatorId > b.indicatorId)
+            return 1;
+        if(a.indicatorId === b.indicatorId){
+            if(a.scenarioId < b.scenarioId)
+                return -1;
+            if(a.scenarioId > b.scenarioId)
+                return 1;
+        }
+    }
+
+    dataFilteredByAllSelections.sort(compare);
+
+    var seriesnames = [];
+    scenarios.map((scenario)=>
+        seriesnames.push(scenario.name));
+
+    var seriesdata = [];
+    for(let scenario of scenarios){
+        var dataforonescenario = [];
+        for(let data of dataFilteredByAllSelections){
+            if(data.scenarioId===scenario.id){
+                dataforonescenario.push(data.value);
+            }
+        }
+        seriesdata.push(dataforonescenario);
+    }
+
+    var dataForGraphs = [];
+    for(var i=0; i<scenarios.length; i++){
+        dataForGraphs.push({
+            type: 'column',
+            name: seriesnames[i],
+            data: seriesdata[i]
+        });
+        
+    var indicatornames = [];
+    indicators.map((indicator)=>
+        indicatornames.push(indicator.name));
+    }
+
+    console.log("data: ", dataForGraphs);
+
+    var title = this.props.regionobject.name + ' ' + timeperiod.yearStart + '-' + timeperiod.yearEnd;
+            
+    if(this.state.rSelected==='column'){
+        var config = {
         
             chart: {
-                //{this.state.polar1 ? '' : type: this.state.rSelected}
-                    type: this.state.rSelected,
-                    
-                    polar: this.state.polar1,
+                    type: 'column',
             },
             title: {
-                text: this.props.regionobject.name + ' ' + this.props.periodobject.yearStart + '-' + this.props.periodobject.yearEnd
-            },
-            subtitle: {
-                text: this.props.scenarioobject.length>0?'Scenarios: ' + this.props.scenarioobject.map((scenario) => ' '+scenario.name):null
+                text: title
             },
             xAxis: {
-                categories: [
-                    'Jan',
-                    'Feb',
-                    'Mar',
-                    'Apr',
-                    'May',
-                    'Jun',
-                    'Jul',
-                    'Aug',
-                    'Sep',
-                    'Oct',
-                    'Nov',
-                    'Dec'
-                ],
+                categories: indicators.map((indicator, i)=>
+                    indicator.name),
                 crosshair: true
             },
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Rainfall (mm)'
+                    text: 'Value'
                 }
             },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                    '<td style="padding:0"><b>{point.y:f}</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
@@ -92,37 +168,85 @@ class Graphs extends Component {
                     }
                 }
             },
-            series: [{
-                name: 'Tokyo',
-                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+            series: 
+            dataForGraphs
+        };
+    }else if(this.state.rSelected==='polar'){
+        var config = {
+            chart: {
+                polar: true,
+                type: 'column'
+            },
         
-            }, {
-                name: 'New York',
-                data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+            title: {
+                text: title
+            },
         
-            }, {
-                name: 'London',
-                data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+            pane: {
+                startAngle: 0,
+                endAngle: 360
+            },
         
-            }, {
-                name: 'Berlin',
-                data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+            xAxis: {
+                tickInterval: 360/indicatornames.length,
+                min: 0,
+                max: 360,
+                labels: {
+                    formatter: function () {
+                        return this.value + '°';
+                    }
+                }
+            },
         
-            }]
-    };
+            yAxis: {
+                min: 0
+            },
+        
+            plotOptions: {
+                series: {
+                    pointStart: 0,
+                    pointInterval: 360/indicatornames.length,
+                    pointPlacement: 'between'
+                },
+                column: {
+                    pointPadding: 0,
+                    groupPadding: 0
+                }
+            },
+        
+            series: dataForGraphs
+        }
+    }
 
     return (
       <div>
-        <h1>
-          <ReactHighcharts config = {config}></ReactHighcharts>
-        </h1>
-
+          <p></p>
+          <p></p>
+          {this.state.rSelected==='table'
+          ?
+          <div class="table-responsive">
+          <table class="table" border="1">
+          <tr BGCOLOR="#E5E8E6">
+            <th></th>
+            {indicatornames.map((indicator)=>
+                <th className="toptobottom">{indicator}</th>)}
+          </tr>
+          {dataForGraphs.map((data)=>
+            <tr BGCOLOR="#E5E8E6">
+                <th>{data.name}</th>
+                {data.data.map((value)=>
+                    <td>{value}</td>)}
+            </tr>)}
+        </table>
+        </div>
+          :<h1><ReactHighcharts config = {config}></ReactHighcharts></h1>}
+        <p></p>
+        <p></p>
         <ButtonGroup>
-          <Button color="default" onClick={() => this.onRadioBtnClick('column')} active={this.state.rSelected.includes ('column')}>column</Button>
-          <Button color="default" onClick={() => this.onRadioBtnClick('polar')} active={this.state.rSelected.includes ('polar')}>polar</Button>
-          <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>pie</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('column')} active={this.state.rSelected.includes ('column')}>Column</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('polar')} active={this.state.rSelected.includes ('polar')}>Polar</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('table')} active={this.state.rSelected.includes ('table')}>Table</Button>
         </ButtonGroup>
-        <p>Selected: {this.state.rSelected}</p>
       </div>)
   }
 }
