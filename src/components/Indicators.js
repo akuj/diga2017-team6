@@ -1,131 +1,142 @@
-import React, { Component } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {DropdownButton, MenuItem, ButtonGroup, Button, ToggleButtonGroup, ToggleButton} from 'react-bootstrap';
-
-
-const woodProduction = [
-    'Stump Price',
-    'Present value of net incomes',
-    'Removal',
-    'Volume'
-];
-const biodiversity = [
-    'Amount of decaying wood',
-    'Number of vascular plants',
-    'Coverage of bilberry'
-];
-const natural_nonwood_forestPrducts = [
-    'Bilberry crop',    
-    'Cranberry crop',
-    'Dewberry crop',
-    'Raspberry crop'
-];
-const carbon = [
-    'Amount of Carbon'
-];
-const others = [
-    'Biomass'
-];
-
+import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 class Indicators extends React.Component {
-    
+
     constructor (props) {
         super(props);
-        this.state = {
-            woodProduction: ['Stump price','Present value of net incomes','Removal','Volume'],
-            biodiversity: ['Amount of decaying wood','Number of vascular plants','Coverage of bilberry'],
-            natural_nonwood_forestProducts: ['Bilberry crop','Cranberry crop','Dewberry crop','Raspberry crop'],
-            carbon: 'Amount of Carbon',
-            others: 'Biomass',
-            checkboxesSelected: []
-        };
 
         this.onCheckboxBtnClick = this.onCheckboxBtnClick.bind(this);
+        this.sendNewIndicators = this.sendNewIndicators.bind(this);
+        this.changeLanguageOfSelections = this.changeLanguageOfSelections.bind(this);
 
+        this.state = {
+            indicatorsSelected: [],
+        };
     }
 
     onCheckboxBtnClick(selected) {
-        const index = this.state.checkboxesSelected.indexOf(selected);
+        const index = this.state.indicatorsSelected.map((indikator)=>
+            indikator.id).indexOf(selected.id);
+
+        function compare(a,b) {
+            if (a.order < b.order)
+              return -1;
+            if (a.order > b.order)
+              return 1;
+            return 0;
+        }
 
         if (index < 0) {
-            this.state.checkboxesSelected.push(selected);
+            this.state.indicatorsSelected.push(selected);
+            this.state.indicatorsSelected.sort(compare);
         }
-        else if(this.state.checkboxesSelected.length>1) {
-            this.state.checkboxesSelected.splice(index, 1);
+        else if(this.state.indicatorsSelected.length>1) {
+            this.state.indicatorsSelected.splice(index, 1);
         }
-        this.setState({ checkboxesSelected: [...this.state.checkboxesSelected] });
-       
+        this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] }, ()=>{
+            this.sendNewIndicators();
+        });
     }
 
+    sendNewIndicators(){
+        this.props.sendIndicatorChoicesToApp(this.state.indicatorsSelected);
+    }
+
+    checkSelectedIndicatorsArePartOfAvailableOptions(){
+        var optionIDs=[];
+        var atLeastOneIsSelected = false;
+
+        if(this.props.scenariosDataFromParent[0]!==undefined){
+            this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorCategory) =>
+            indicatorCategory.indicators.map((indicator, a)=>
+                optionIDs.push(indicator.id)));
+    
+                this.state.indicatorsSelected.map((indikator)=>
+                indikator.id).map((selectedIndicatorID, i) =>
+                {if(optionIDs.includes(selectedIndicatorID)){
+                    atLeastOneIsSelected=true;
+                }else{
+                    this.onCheckboxBtnClick(this.state.indicatorsSelected[i])
+                }});
+    
+            if(!atLeastOneIsSelected){
+                this.onCheckboxBtnClick(this.props.scenariosDataFromParent[0].indicatorCategories[0].indicators[0])
+            }
+        }
+
+        this.changeLanguageOfSelections();
+    }
+
+    changeLanguageOfSelections(){
+        var availableIndicators = [];
+
+        //Check selected indicators are in the selected language
+        if(this.props.scenariosDataFromParent!==undefined){
+            this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorcategory, i)=>
+            indicatorcategory.indicators.map((indicator, a)=>
+                availableIndicators.push(indicator)));
+
+            this.state.indicatorsSelected.map((indicator, i)=>
+                {if(availableIndicators.find(function isSelectedIndicator(indikator){
+                    return indikator.id === indicator.id;
+                    }).description!==indicator.description){
+                        let newIndicators = this.state.indicatorsSelected.slice();
+                        newIndicators[i] = availableIndicators.find(function isSelectedIndicator(indikator){
+                            return indikator.id === indicator.id;
+                            })
+                        this.setState({ indicatorsSelected : newIndicators }, () => {
+                            this.sendNewIndicators();
+                        })
+                    }
+                }
+            )
+        }
+    }
 
     render () {
         return (
             <div>
-                <h1>Categories</h1>
-                <p id="Options">Wood Production</p>
-                <ButtonGroup vertical>
-                    {woodProduction.map((indicator1, i) =>
-                        <Button className="button"
-                        color="default"
-                        key={i}
-                        onClick={() => this.onCheckboxBtnClick(indicator1)}
-                        active={this.state.checkboxesSelected.includes(indicator1)}>
-                        {indicator1}
-                        </Button>
-                    )}
-                </ButtonGroup>
-                
-                <p id="Options">Biodiversity</p>
-                <ButtonGroup vertical>
-                    {biodiversity.map((indicator2, i) =>
-                    <Button className="button"
-                    color="default"
-                    key={i}
-                    onClick={() => this.onCheckboxBtnClick(indicator2)}
-                    active={this.state.checkboxesSelected.includes(indicator2)}>
-                    {indicator2}
-                    </Button>
-                    )}
-                </ButtonGroup>
-                
-                <p id="Options">Natural/Non-wood Production</p>
-                <ButtonGroup vertical>
-                    {natural_nonwood_forestPrducts.map((indicator3, i) =>
-                    <Button className="button"
-                    color="default"
-                    key={i}
-                    onClick={() => this.onCheckboxBtnClick(indicator3)}
-                    active={this.state.checkboxesSelected.includes(indicator3)}>
-                    {indicator3}
-                    </Button>
-                    )}
-                </ButtonGroup>
-
-                <p id="Options">Carbon</p>
-                <ButtonGroup vertical>
-                    {carbon.map((indicator4, i) =>
-                    <Button className="button"
-                    color="default"
-                    key={i}
-                    onClick={() => this.onCheckboxBtnClick(indicator4)}>
-                    {indicator4}
-                    </Button>
-                    )}
-                </ButtonGroup>
-
-                <p id="Options">Others</p>
-                <ButtonGroup vertical>
-                    {others.map((indicator5, i) =>
-                    <Button className="button"
-                    color="default"
-                    key={i}
-                    onClick={() => this.onCheckboxBtnClick(indicator5)}>
-                    {indicator5}
-                    </Button>
-                    )}
-                </ButtonGroup>
-
+                <h1>{this.props.language==='fi'?'Indikaattorit':'Indicators'}</h1>         
+                {this.props.scenariosDataFromParent[0]===undefined?'Error':this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorCategory, i) =>
+                    <div>
+                        {
+                        indicatorCategory.isMandatory===1 ? 
+                        <div><p id="Options">{indicatorCategory.name}*</p>
+                        <ButtonGroup vertical key={i}>
+                            {indicatorCategory.indicators.map((indicator, a)=>
+                                <OverlayTrigger placement="left" overlay={
+                                    <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
+                                        <Button className="button" color="default" key={indicator.id} 
+                                            onClick={() => this.onCheckboxBtnClick(indicator)}
+                                            active={this.state.indicatorsSelected.map((indikator)=>
+                                                indikator.id).includes(indicator.id)}>
+                                                {indicator.name}                        
+                                        </Button>
+                                </OverlayTrigger>
+                            )}
+                        </ButtonGroup></div>
+                        :
+                        <div><p id="Options">{indicatorCategory.name}</p>
+                        <ButtonGroup vertical key={i}>
+                            {indicatorCategory.indicators.map((indicator, a)=>
+                                <OverlayTrigger placement="left" overlay={
+                                    <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
+                                        <Button className="button" color="default" key={indicator.id} 
+                                            onClick={() => this.onCheckboxBtnClick(indicator)}
+                                            active={this.state.indicatorsSelected.map((indikator)=>
+                                                indikator.id).includes(indicator.id)}>
+                                                {indicator.name} 
+                                        </Button>
+                                </OverlayTrigger>
+                            )}
+                        </ButtonGroup></div>
+                        }
+                        <p></p>
+                    </div>
+                )}
+                {this.checkSelectedIndicatorsArePartOfAvailableOptions()}
             </div>
         );
     }
