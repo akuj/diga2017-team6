@@ -30,6 +30,7 @@ class Graphs extends Component {
       }
 
   render () {
+    var language = this.props.language;
     var data = this.props.scenariosDataFromParent[0].values;
 
     var scenarios = this.props.scenarioobject;
@@ -139,7 +140,7 @@ class Graphs extends Component {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Value'
+                    text: language==='fi'?'Arvot':'Values'
                 }
             },
             tooltip: {
@@ -243,9 +244,9 @@ class Graphs extends Component {
         <p></p>
         <p></p>
         <ButtonGroup>
-          <Button color="default" onClick={() => this.onRadioBtnClick('column')} active={this.state.rSelected.includes ('column')}>Column</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('column')} active={this.state.rSelected.includes ('column')}>{language==='fi'?'Pylväs':'Column'}</Button>
           <Button color="default" onClick={() => this.onRadioBtnClick('polar')} active={this.state.rSelected.includes ('polar')}>Polar</Button>
-          <Button color="default" onClick={() => this.onRadioBtnClick('table')} active={this.state.rSelected.includes ('table')}>Table</Button>
+          <Button color="default" onClick={() => this.onRadioBtnClick('table')} active={this.state.rSelected.includes ('table')}>{language==='fi'?'Taulukko':'Table'}</Button>
         </ButtonGroup>
       </div>)
   }
