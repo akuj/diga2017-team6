@@ -19,9 +19,9 @@ class App extends Component {
         selectedRegionallevel: {},
         selectedRegion: {},
         selectedScenariocollection: {},
-        selectedScenarios: {},
-        selectedPeriod: {},
-        selectedIndicators: [],
+        selectedScenarios: null,
+        selectedPeriod: null,
+        selectedIndicators: null,
         selectedLanguage: 'fi',
 
         dataGotFromAPI: false
@@ -99,7 +99,9 @@ class App extends Component {
               </div>
               <div className="col-md-6"><Graphs regionobject = {this.state.selectedRegion}
                                                 periodobject = {this.state.selectedPeriod} 
-                                                scenarioobject = {this.state.selectedScenarios}/>
+                                                scenarioobject = {this.state.selectedScenarios}
+                                                scenariosDataFromParent={this.state.scenariosData}
+                                                indicatorobject = {this.state.selectedIndicators}/>
               </div>
               <div className="col-md-3"><Indicators scenariosDataFromParent={this.state.scenariosData}
                                                     language={this.state.selectedLanguage}
