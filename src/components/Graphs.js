@@ -31,18 +31,35 @@ class Graphs extends Component {
     var selectedindicators = this.props.Indicatorsobject.length
 
     var seriesarray = []
-    var seriesarray2 = { name: 'perkele', data: [40, 30, 20, 10]}
-    //var seriesarray3 = { name: 'saatana', data: [10, 20, 30, 40]}
+    var scenariodata1 = []
+    var scenariodata2 = []
+    var scenariodata3 = []
+    var scenariodata4 = []
+    var scenariodata5 = []
+    var scenariodata6 = []
+
+    var scenarioarray1 = { name: 'scenario1', data: scenariodata1 }
+    var scenarioarray2 = { name: 'scenario2', data: scenariodata2 }
+    var scenarioarray3 = { name: 'scenario3', data: scenariodata3 }
+    var scenarioarray4 = { name: 'scenario4', data: scenariodata4 }
+    var scenarioarray5 = { name: 'scenario5', data: scenariodata5 }
+    var scenarioarray6 = { name: 'scenario6', data: scenariodata6 }
+
+    scenariodata1.push(10, 60);
+    scenariodata2.push(20, 50);
+    scenariodata3.push(30, 40);
+    scenariodata4.push(40, 30);
+    scenariodata5.push(50, 20);
+    scenariodata6.push(60, 10);
+    seriesarray.push(scenarioarray1, scenarioarray2, scenarioarray3, scenarioarray4, scenarioarray5, scenarioarray6);
+    
     //console.log("data1111", seriesarray2[0].data)
-    var perkele = Array.prototype.slice.call(seriesarray2, data)
+    //var perkele = Array.prototype.slice.call(seriesarray2, data)
     //var perkele = seriesarray2.data.slice(1, 4);
     //var vittu = seriesarray3.data.slice(1, selectedindicators);
-    seriesarray.push(perkele);
-    //seriesarray.push(vittu);
-    
-    seriesarray2.data[2];
-    
-    /*var dataperkele = [{"scenarioId":10,"indicatorId":141,"timePeriodId":20,"value":0.88},
+ 
+
+    var dataperkele = [{"scenarioId":10,"indicatorId":141,"timePeriodId":20,"value":0.88},
     {"scenarioId":10,"indicatorId":125,"timePeriodId":20,"value":0.7},  {"scenarioId":10,"indicatorId":139,"timePeriodId":20,"value":0.64},
     {"scenarioId":10,"indicatorId":124,"timePeriodId":20,"value":0.11}, {"scenarioId":10,"indicatorId":137,"timePeriodId":20,"value":0.57},
     {"scenarioId":10,"indicatorId":123,"timePeriodId":20,"value":0.65}, {"scenarioId":10,"indicatorId":134,"timePeriodId":20,"value":0.64},
@@ -75,8 +92,13 @@ class Graphs extends Component {
     {"scenarioId":11,"indicatorId":139,"timePeriodId":20,"value":0.75}, {"scenarioId":11,"indicatorId":124,"timePeriodId":20,"value":0.11},
     {"scenarioId":11,"indicatorId":137,"timePeriodId":20,"value":0.72}, {"scenarioId":11,"indicatorId":123,"timePeriodId":20,"value":0},
     {"scenarioId":11,"indicatorId":134,"timePeriodId":20,"value":0.16}, {"scenarioId":11,"indicatorId":122,"timePeriodId":20,"value":0.9},
-    {"scenarioId":11,"indicatorId":127,"timePeriodId":21,"value":0.46}]*/
+    {"scenarioId":11,"indicatorId":127,"timePeriodId":21,"value":0.46}]
 
+    function filter() {
+        //document.getElementById("demo").innerHTML = ages.filter(checkAdult);
+        var testi = dataperkele.filter(perkele => perkele.scenarioId === "scenarioId", );
+        console.log(testi);
+    }
 
     /*var indicatornames = []
 
