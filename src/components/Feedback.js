@@ -53,7 +53,7 @@ class Feedback extends Component {
           <Modal.Header closeButton>
             <Modal.Title>{language==='fi'?'Lähetä palautetta':'Send feedback'}</Modal.Title>
           </Modal.Header>
-          <Form action={"metsamittari@luke.fi?subject="+subject+"&body="+fromusertext+this.state.inputUsernameValue+"%0D%0A"+messagetext+this.state.inputMessageValue} method="post" enctype="text/plain">
+          <Form action={"mailto:metsamittari@luke.fi?subject="+subject+"&body="+fromusertext+this.state.inputUsernameValue+"%0D%0A"+messagetext+this.state.inputMessageValue} method="post" enctype="text/plain">
           <Modal.Body>
             <FormGroup>
                 <InputGroup>
