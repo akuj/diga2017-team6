@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import ReactDOM from 'react-dom';
 import './App.css';
 import ScenarioOptionsData from './data/ScenarioOptionsData'
 import Graphs from './components/Graphs';
 import DropdownMenuScenarios from './components/DropdownMenuScenarios';
 import Indicators from './components/Indicators';
 import LanguageSelector from './components/LanguageSelector';
+import Feedback from './components/Feedback'
 
 class App extends Component {
   constructor(props) {
@@ -85,6 +84,7 @@ class App extends Component {
       <div className="App">            
         <h1 className="App-title">{this.state.selectedLanguage==='fi'?'Metsämittari':'Forest Indicator'}</h1>
         <LanguageSelector sendLanguageToApp={this.getLanguageSelection}/>
+        <Feedback language={this.state.selectedLanguage}/>
         {this.state.dataGotFromAPI ? 
           <div className="container">
           <div className="row">          
