@@ -88,7 +88,7 @@ class App extends Component {
         {this.state.dataGotFromAPI ? 
           <div className="container">
           <div className="row">          
-              <div className="col-md-3">
+              <div className="col-sm-3">
                 <div className="ScenarioMenu"> 
                   <DropdownMenuScenarios  regionalLevelsDataFromParent={this.state.regionalLevelsData}
                                           regionsDataFromParent={this.state.regionsData}
@@ -97,14 +97,14 @@ class App extends Component {
                                           sendChoicesToApp={this.getChoicesFromScenarioMenu}/>
                 </div>
               </div>
-              <div className="col-md-6"><Graphs regionobject = {this.state.selectedRegion}
+              <div className="col-sm-6"><Graphs regionobject = {this.state.selectedRegion}
                                                 periodobject = {this.state.selectedPeriod} 
                                                 scenarioobject = {this.state.selectedScenarios}
                                                 scenariosDataFromParent={this.state.scenariosData}
                                                 language={this.state.selectedLanguage}
                                                 indicatorobject = {this.state.selectedIndicators}/>
               </div>
-              <div className="col-md-3">
+              <div className="col-sm-3">
               <div className="IndicatorMenu"><Indicators scenariosDataFromParent={this.state.scenariosData}
                                                     language={this.state.selectedLanguage}
                                                     sendIndicatorChoicesToApp={this.getChoicesFromIndicatorMenu}/></div>

@@ -119,8 +119,6 @@ class Graphs extends Component {
         indicatornames.push(indicator.name));
     }
 
-    console.log("data: ", dataForGraphs);
-
     var title = this.props.regionobject.name + ' ' + timeperiod.yearStart + '-' + timeperiod.yearEnd;
             
     if(this.state.rSelected==='column'){
