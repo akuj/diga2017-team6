@@ -72,7 +72,7 @@ class Feedback extends Component {
           </Modal.Body>
           <Modal.Footer>
                 <Button bsStyle="primary" onClick={this.close} type="submit">Submit</Button>
-                <Button bsStyle="secondary" onClick={this.close}>Cancel</Button>
+                <Button bsStyle="warning" onClick={this.close}>Cancel</Button>
           </Modal.Footer>
           </Form>
         </Modal>

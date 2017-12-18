@@ -48,7 +48,6 @@ class Graphs extends Component {
         }}
     )
 
-
     var dataFilteredByIndicators = [];
     dataFilteredByTimeperiod.map((value)=>
         indicators.map((indicator)=>
@@ -66,7 +65,6 @@ class Graphs extends Component {
             }}
         )
     )
-
 
     function compare(a,b) {
         if(a.indicatorId < b.indicatorId)

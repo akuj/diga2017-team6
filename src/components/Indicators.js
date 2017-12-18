@@ -160,7 +160,7 @@ class Indicators extends React.Component {
                         <div><p id="Options">{indicatorCategory.name}*</p>
                         <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
-                                <OverlayTrigger placement="left" overlay={
+                                <OverlayTrigger placement="left" key={a+100} overlay={
                                     <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
                                         <Button className="button" color="default" key={indicator.id} 
                                             onClick={() => this.onMandatoryCategoryClick(indicatorCategory, indicator)}
@@ -177,7 +177,7 @@ class Indicators extends React.Component {
                         <div><p id="Options">{indicatorCategory.name}</p>
                         <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
-                                <OverlayTrigger placement="left" overlay={
+                                <OverlayTrigger placement="left" key={a+200} overlay={
                                     <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
                                         <Button className="button" color="default" key={indicator.id} 
                                             onClick={() => this.onCheckboxBtnClick(indicator)}

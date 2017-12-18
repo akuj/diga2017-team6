@@ -24,7 +24,7 @@ function getAllRegionLevelData(language){
 
 function getRegionData(regionLevelId, language){
 
-        var url = "https://melatupa.azurewebsites.net/regionLevels/"+regionLevelId+"/"+"regions";
+        var url = "https://melatupa.azurewebsites.net/regionLevels/"+regionLevelId+"/regions";
     
         return new Promise((resolve, reject) => {
     

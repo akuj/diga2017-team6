@@ -111,9 +111,9 @@ class DropdownMenuScenarios extends React.Component {
             {if(this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
                 return skenario.id === scenario.id;
             })===undefined){
-                console.log("undefined se on kyllä");
+
             }else{
-                {if(this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
+                if(this.props.scenariosDataFromParent[0].scenarios.find(function isSelectedScenario(skenario){
                     return skenario.id === scenario.id;
                 }).description!==scenario.description){
                     let newScenarios = this.state.scenariosSelected.slice();
@@ -123,7 +123,7 @@ class DropdownMenuScenarios extends React.Component {
                     this.setState({ scenariosSelected : newScenarios }, () => {
                         this.sendNewScenarios();
                     })
-                }}
+                }
             }})
         }
     }
