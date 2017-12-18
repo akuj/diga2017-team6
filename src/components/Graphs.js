@@ -12,21 +12,13 @@ class Graphs extends Component {
     constructor (props) {
         super(props);
     
-        this.state = { rSelected: 'column', polar1: false};
+        this.state = { rSelected: 'column'};
     
         this.onRadioBtnClick = this.onRadioBtnClick.bind(this);
       }
 
-    onRadioBtnClick(rSelected) {
-        if (this.state.rSelected === 'polar')
-        {
-            this.setState({ polar1: true });
-        }
-        else(this.state.rSelected !== 'polar')
-        {
-            this.setState({ polar1: false });
-            this.setState({ rSelected });
-        }
+    onRadioBtnClick(selected) {
+        this.setState({ rSelected: selected });
       }
 
   render () {
@@ -113,19 +105,19 @@ class Graphs extends Component {
             name: seriesnames[i],
             data: seriesdata[i]
         });
-        
+    }
+
     var indicatornames = [];
     indicators.map((indicator)=>
         indicatornames.push(indicator.name));
-    }
-
+    
     var title = this.props.regionobject.name + ' ' + timeperiod.yearStart + '-' + timeperiod.yearEnd;
             
-    if(this.state.rSelected==='column'){
+    if(this.state.rSelected!=='table'){
         var config = {
         
             chart: {
-
+                    polar: this.state.rSelected==='polar'?true:false,
                     type: 'column',
 
             },
@@ -156,67 +148,10 @@ class Graphs extends Component {
                     pointPadding: 0.2,
                     borderWidth: 0
                 },
-
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: 'black'
-                        }
-                    }
-                }
             },
             series: 
             dataForGraphs
         };
-    }else if(this.state.rSelected==='polar'){
-        var config = {
-            chart: {
-                polar: true,
-                type: 'column'
-            },
-        
-            title: {
-                text: title
-            },
-        
-            pane: {
-                startAngle: 0,
-                endAngle: 360
-            },
-        
-            xAxis: {
-                tickInterval: 360/indicatornames.length,
-                min: 0,
-                max: 360,
-                labels: {
-                    formatter: function () {
-                        return this.value + '°';
-                    }
-                }
-            },
-        
-            yAxis: {
-                min: 0
-            },
-        
-            plotOptions: {
-                series: {
-                    pointStart: 0,
-                    pointInterval: 360/indicatornames.length,
-                    pointPlacement: 'between'
-                },
-                column: {
-                    pointPadding: 0,
-                    groupPadding: 0
-                }
-            },
-        
-            series: dataForGraphs
-        }
     }
 
     return (
