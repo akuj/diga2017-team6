@@ -16,6 +16,14 @@ class Indicators extends React.Component {
         };
     }
 
+    componentDidMount(){
+        this.props.scenariosDataFromParent[0].indicatorCategories.map((category, i)=>
+            {if(category.isMandatory===1){
+                this.onCheckboxBtnClick(category.indicators[0]);
+            }}
+        )
+    }
+
     onCheckboxBtnClick(selected) {
         const index = this.state.indicatorsSelected.map((indikator)=>
             indikator.id).indexOf(selected.id);
@@ -38,6 +46,50 @@ class Indicators extends React.Component {
         this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] }, ()=>{
             this.sendNewIndicators();
         });
+    }
+
+    onMandatoryCategoryClick(category, selected){
+        function compare(a,b) {
+            if (a.order < b.order)
+                return -1;
+            if (a.order > b.order)
+                return 1;
+            return 0;
+        }
+
+        var categoryindicatorIDs = [];
+        category.indicators.map((indikator, i)=>
+            categoryindicatorIDs.push(indikator.id));
+
+        var selectedIndicatorsIDs = [];
+        this.state.indicatorsSelected.map((indigator)=>
+            selectedIndicatorsIDs.push(indigator.id));
+        
+        var categoryHasSelection=0;
+
+        for(var a=0;a<selectedIndicatorsIDs.length;a++){
+            if(categoryindicatorIDs.includes(selectedIndicatorsIDs[a])){
+                categoryHasSelection++;
+            }
+        }
+
+        if(categoryHasSelection===0){
+            this.onCheckboxBtnClick(category.indicators[0]);
+        }else if(categoryHasSelection===1){
+            const index = this.state.indicatorsSelected.map((indikator)=>
+                indikator.id).indexOf(selected.id);      
+
+            if (index < 0) {
+                this.state.indicatorsSelected.push(selected);
+                this.state.indicatorsSelected.sort(compare);
+            }
+
+            this.setState({ indicatorsSelected: [...this.state.indicatorsSelected] }, ()=>{
+                this.sendNewIndicators();
+            });
+        }else if(categoryHasSelection>1){
+            this.onCheckboxBtnClick(selected);
+        }
     }
 
     sendNewIndicators(){
@@ -99,17 +151,19 @@ class Indicators extends React.Component {
         return (
             <div>
                 <h1>{this.props.language==='fi'?'Indikaattorit':'Indicators'}</h1>         
-                {this.props.scenariosDataFromParent[0]===undefined?'Error':this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorCategory, i) =>
+                {this.props.scenariosDataFromParent[0]===undefined?'Error':
+                this.props.scenariosDataFromParent[0].indicatorCategories.map((indicatorCategory, i) =>
                     <div>
                         {
                         indicatorCategory.isMandatory===1 ? 
+
                         <div><p id="Options">{indicatorCategory.name}*</p>
                         <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
-                                <OverlayTrigger placement="left" overlay={
+                                <OverlayTrigger placement="left" key={a+100} overlay={
                                     <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
                                         <Button className="button" color="default" key={indicator.id} 
-                                            onClick={() => this.onCheckboxBtnClick(indicator)}
+                                            onClick={() => this.onMandatoryCategoryClick(indicatorCategory, indicator)}
                                             active={this.state.indicatorsSelected.map((indikator)=>
                                                 indikator.id).includes(indicator.id)}>
                                                 {indicator.name}                        
@@ -117,11 +171,13 @@ class Indicators extends React.Component {
                                 </OverlayTrigger>
                             )}
                         </ButtonGroup></div>
+
                         :
+
                         <div><p id="Options">{indicatorCategory.name}</p>
                         <ButtonGroup vertical key={i}>
                             {indicatorCategory.indicators.map((indicator, a)=>
-                                <OverlayTrigger placement="left" overlay={
+                                <OverlayTrigger placement="left" key={a+200} overlay={
                                     <Tooltip id="tooltip">{indicator.description}</Tooltip>}>
                                         <Button className="button" color="default" key={indicator.id} 
                                             onClick={() => this.onCheckboxBtnClick(indicator)}
