@@ -53,6 +53,12 @@ class Graphs extends Component {
     scenariodata6.push(60, 10);
     seriesarray.push(scenarioarray1, scenarioarray2, scenarioarray3, scenarioarray4, scenarioarray5, scenarioarray6);
     
+    /*var 
+    var perkelearray = [
+        Indicatorsarray = ['']
+        
+    ]*/
+
     //console.log("data1111", seriesarray2[0].data)
     //var perkele = Array.prototype.slice.call(seriesarray2, data)
     //var perkele = seriesarray2.data.slice(1, 4);
@@ -205,7 +211,7 @@ class Graphs extends Component {
           <Button color="default" onClick={() => this.onRadioBtnClick('polar')} active={this.state.rSelected.includes ('polar')}>polar</Button>
           <Button color="default" onClick={() => this.onRadioBtnClick('pie')} active={this.state.rSelected.includes ('pie')}>pie</Button>
         </ButtonGroup>
-        <p>Selected: {this.state.rSelected}</p>
+        <p backgroundColor="blue">Selected: {this.state.rSelected}</p>
       </div>)
   }
 }
