@@ -163,11 +163,11 @@ class Graphs extends Component {
           <tr BGCOLOR="#E5E8E6">
             <th></th>
             {indicatornames.map((indicator)=>
-                <th className="toptobottom">{indicator}</th>)}
+                <th className = "toptobottom"> &nbsp;  {indicator}</th>)}
           </tr>
           {dataForGraphs.map((data)=>
             <tr BGCOLOR="#E5E8E6">
-                <th>{data.name}</th>
+                <th> &nbsp; {data.name}</th>
                 {data.data.map((value)=>
                     <td>{value}</td>)}
             </tr>)}
